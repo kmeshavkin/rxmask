@@ -1,0 +1,16 @@
+{
+  "name": "rxmask",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rxmask.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-google": "^0.12.0"
+  }
+}
