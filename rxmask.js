@@ -3,27 +3,30 @@
 // TODO: Transform it into a module
 // TODO: Add just number and just letter support
 // TODO: Allow raw phone and mask to be extracted (get all intermediate steps)
-
-let maskSymb = '*';
-let mask = '+7 (***) ***-**-**';
-let phoneInput = '1';
+// TODO: Better comment code
+// TODO: Check for unicode support
 
 function maskToRegex(mask, maskSymbol) {
-  let regexStr = RegExp(`(\\${maskSymbol}+)`);
-  let regexArr = mask.split(regexStr);
-  if (regexArr[regexArr.length - 1].length == 0) regexArr.slice(-1);
-  regexArr = regexArr.map((el) => {
-    if (el.indexOf(maskSymbol) != -1) {
-      return `(${el.replace(RegExp('\\' + maskSymbol, 'g'), '.?')})`;
-    } else {
-      return `(?:${el.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})?`;
-    }
-  });
-  return RegExp(regexArr.join(''));
+  let regexArr = mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`));
+  regexArr = regexArr.filter((el) => el);
+  regexArr = regexArr.map((el) => replaceSymbol(el, maskSymbol));
+  return RegExp(regexArr.join('')); // ! Problem when adding symbols before
 }
 
-function getRawPhone(phoneInput, mask) {
-  let rawArr = phoneInput.match(mask);
+function replaceSymbol(el, maskSymbol) {
+  if (el.indexOf(maskSymbol) != -1) {
+    return `(${el.replace(RegExp(regexLiteral(maskSymbol), 'g'), '.?')})`;
+  } else {
+    return `(?:${regexLiteral(el)})?`;
+  }
+}
+
+function regexLiteral(rx) {
+  return rx.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getRawInput(phoneInput, mask) {
+  const rawArr = phoneInput.match(mask);
   if (rawArr) {
     return rawArr.slice(1).join('');
   } else {
@@ -31,17 +34,18 @@ function getRawPhone(phoneInput, mask) {
   }
 }
 
-function applyMask(rawPhone, mask, maskSymb) {
-  rawPhone = [...rawPhone];
-  return [...mask].map((el) => {
-    return (el == maskSymb) ? rawPhone.shift() : el;
+function applyMask([...rawInput], [...mask], maskSymb) {
+  return mask.map((el) => {
+    if (rawInput.length < 1) return ''; // TODO: Let user decide - keep rest of mask or not
+    return (el == maskSymb) ? rawInput.shift() : el;
   }).join('');
 }
 
-let maskStr = maskToRegex(mask, maskSymb);
-let rawPhone = getRawPhone(phoneInput, maskStr);
-let resultStr = applyMask(rawPhone, mask, maskSymb);
-
-console.log(maskStr);
-console.log(rawPhone);
-console.log(resultStr);
+function inputMask(element, mask, maskSymbol = '*') {
+  const maskStr = maskToRegex(mask, maskSymbol);
+  console.log(maskStr);
+  const rawInput = getRawInput(element.value, maskStr);
+  console.log(rawInput);
+  const resultStr = applyMask(rawInput, mask, maskSymbol);
+  element.value = resultStr;
+}

@@ -10,7 +10,15 @@
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.1",
     "eslint-config-google": "^0.12.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kostyan1996/rxmask.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kostyan1996/rxmask/issues"
+  },
+  "homepage": "https://github.com/Kostyan1996/rxmask#readme"
 }
