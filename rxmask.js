@@ -10,12 +10,12 @@ function maskToRegex(mask, maskSymbol) {
   let regexArr = mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`));
   regexArr = regexArr.filter((el) => el);
   regexArr = regexArr.map((el) => replaceSymbol(el, maskSymbol));
-  return RegExp(regexArr.join('')); // ! Problem when adding symbols before
+  return RegExp(regexArr.join(''));
 }
 
 function replaceSymbol(el, maskSymbol) {
   if (el.indexOf(maskSymbol) != -1) {
-    return `(${el.replace(RegExp(regexLiteral(maskSymbol), 'g'), '.?')})`;
+    return `(${el.replace(RegExp(regexLiteral(maskSymbol), 'g'), '\\d?')})`;
   } else {
     return `(?:${regexLiteral(el)})?`;
   }
@@ -41,11 +41,20 @@ function applyMask([...rawInput], [...mask], maskSymb) {
   }).join('');
 }
 
+function setCursorPos(prevPos, mask, maskSymbol) {
+  const rawSymbolPos = mask.indexOf(maskSymbol, prevPos - 1);
+  return (rawSymbolPos == -1) ? prevPos : rawSymbolPos + 1;
+}
+
 function inputMask(element, mask, maskSymbol = '*') {
-  const maskStr = maskToRegex(mask, maskSymbol);
+  // TODO: function for removing symbol on cursor position if value.length > mask.length
+  const position = element.selectionStart;
+  let maskStr = maskToRegex(mask, maskSymbol);
+  maskStr = /(?:.*\+.*7.* .*\()?(\d*)(?:\).* )?(\d*)(?:-)?(\d*)(?:-)?(\d*)/; // ! Placeholder, modify maskToRegex
   console.log(maskStr);
   const rawInput = getRawInput(element.value, maskStr);
   console.log(rawInput);
   const resultStr = applyMask(rawInput, mask, maskSymbol);
   element.value = resultStr;
+  element.selectionEnd = setCursorPos(position, mask, maskSymbol);
 }
