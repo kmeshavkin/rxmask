@@ -15,7 +15,7 @@ function maskToRegex(mask, maskSymbol) {
 
 function replaceSymbol(el, maskSymbol) {
   if (el.indexOf(maskSymbol) != -1) {
-    return `(${el.replace(RegExp(regexLiteral(maskSymbol), 'g'), '\\d?')})`;
+    return `(${el.replace(RegExp(regexLiteral(maskSymbol), 'g'), '\\d?')})`; // ! Return to .
   } else {
     return `(?:${regexLiteral(el)})?`;
   }
