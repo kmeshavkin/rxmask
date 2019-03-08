@@ -5,6 +5,7 @@
 // TODO: Allow raw phone and mask to be extracted (get all intermediate steps)
 // TODO: Better comment code
 // TODO: Check for unicode support
+// TODO: Fixed start of mask
 
 function maskToRegex(mask, maskSymbol) {
   let regexArr = mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`));
@@ -50,7 +51,7 @@ function inputMask(element, mask, maskSymbol = '*') {
   // TODO: function for removing symbol on cursor position if value.length > mask.length
   const position = element.selectionStart;
   let maskStr = maskToRegex(mask, maskSymbol);
-  maskStr = /(?:.*\+.*7.* .*\()?(\d*)(?:\).* )?(\d*)(?:-)?(\d*)(?:-)?(\d*)/; // ! Placeholder, modify maskToRegex
+  maskStr = /(?:\+)?(?:7)?(?: )?(?:\()?(\d{0,3})(?:\))?(?: )?(\d{0,3})(?:-)?(\d{0,2})(?:-)?(\d{0,2})/; // ! Placeholder, modify maskToRegex
   console.log(maskStr);
   const rawInput = getRawInput(element.value, maskStr);
   console.log(rawInput);
