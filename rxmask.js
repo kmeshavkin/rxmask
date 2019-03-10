@@ -16,9 +16,9 @@ function maskToRegex(mask, maskSymbol) {
 
 function replaceSymbol(el, maskSymbol) {
   if (el.indexOf(maskSymbol) != -1) {
-    return `(${el.replace(RegExp(regexLiteral(maskSymbol), 'g'), '\\d?')})`; // ! Return to .
+    return `(\\d{0,${el.length}})`; // ! Return to .
   } else {
-    return `(?:${regexLiteral(el)})?`;
+    return [...el].map((ele) => `(?:${regexLiteral(ele)})?`).join('');
   }
 }
 
@@ -51,11 +51,10 @@ function inputMask(element, mask, maskSymbol = '*') {
   // TODO: function for removing symbol on cursor position if value.length > mask.length
   const position = element.selectionStart;
   let maskStr = maskToRegex(mask, maskSymbol);
-  maskStr = /(?:\+)?(?:7)?(?: )?(?:\()?(\d{0,3})(?:\))?(?: )?(\d{0,3})(?:-)?(\d{0,2})(?:-)?(\d{0,2})/; // ! Placeholder, modify maskToRegex
   console.log(maskStr);
   const rawInput = getRawInput(element.value, maskStr);
   console.log(rawInput);
   const resultStr = applyMask(rawInput, mask, maskSymbol);
   element.value = resultStr;
-  element.selectionEnd = setCursorPos(position, mask, maskSymbol);
+  element.selectionEnd = setCursorPos(position, mask, maskSymbol); // ! Sometimes it selects one element, fix
 }
