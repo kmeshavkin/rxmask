@@ -1,5 +1,4 @@
 // TODO: Add tests and try to crash it in every possible way
-// TODO: Transform it into a module
 // TODO: Allow raw phone and mask to be extracted (get all intermediate steps)
 // TODO: Better comment code
 // TODO: Check for unicode support
@@ -56,7 +55,7 @@ function setCursorPos(prevPos, mask, maskSymbol) {
  * @param {String} [maskSymbol] Symbol in mask that will be interpreted as symbol to replace with typed value
  * @param {RegExp} [customRegex] Regex expression to be evaluated upon typed value
  */
-function inputMask(element, mask, maskSymbol = '*', customRegex = /./) {
+export function inputMask(element, mask, maskSymbol = '*', customRegex = /./) {
   try {
     mask += ''; maskSymbol += ''; // Guard for non string values
 
