@@ -1,7 +1,5 @@
-// TODO: Add HTML to test
 // TODO: Add tests and try to crash it in every possible way
 // TODO: Transform it into a module
-// TODO: Add just number and just letter support
 // TODO: Allow raw phone and mask to be extracted (get all intermediate steps)
 // TODO: Better comment code
 // TODO: Check for unicode support
