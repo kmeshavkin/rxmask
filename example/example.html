@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script type="module">
-    import { inputMask } from '../src/rxmask.js';
-    document.querySelector("input").addEventListener("input", () => inputMask(document.querySelector("input"), '+7 (***) ***-**-**', '*', /[1-9]/));
-  </script>
+  <script src="../src/rxmask.js"></script>
 </head>
 <body>
-  <input></input>
+  <input oninput="inputMask(this, '+7 (***) ***-**-**', '*', /[1-9]/)"></input>
 </body>
 </html>

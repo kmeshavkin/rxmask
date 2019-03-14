@@ -55,7 +55,7 @@ function setCursorPos(prevPos, mask, maskSymbol) {
  * @param {String} [maskSymbol] Symbol in mask that will be interpreted as symbol to replace with typed value
  * @param {RegExp} [customRegex] Regex expression to be evaluated upon typed value
  */
-export function inputMask(element, mask, maskSymbol = '*', customRegex = /./) {
+function inputMask(element, mask, maskSymbol = '*', customRegex = /./) {
   try {
     mask += ''; maskSymbol += ''; // Guard for non string values
 
