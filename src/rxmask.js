@@ -1,7 +1,5 @@
-// TODO: Add tests and try to crash it in every possible way
 // TODO: Allow raw phone and mask to be extracted (get all intermediate steps)
-// TODO: Better comment code
-// TODO: Check for unicode support
+// TODO: Better comment code (?)
 // TODO: Fixed start of mask
 
 function maskToRegex(mask, maskSymbol, customRegex) {
@@ -32,10 +30,10 @@ function getRawInput(phoneInput, mask) {
   }
 }
 
-function applyMask([...rawInput], [...mask], maskSymbol) {
+function applyMask([...rawInput], [...mask], maskSymbol, showMask) {
   return mask.map((el) => {
-    if (rawInput.length < 1) return ''; // TODO: Let user decide - keep rest of mask or not
-    return (el == maskSymbol) ? rawInput.shift() : el;
+    if (rawInput.length < 1) return (showMask) ? el : '';
+    else return (el == maskSymbol) ? rawInput.shift() : el;
   }).join('');
 }
 
@@ -53,17 +51,17 @@ function setCursorPos(prevPos, mask, maskSymbol) {
  * @param {Object} element Pass {this} into this parameter, it operates provided input
  * @param {String} mask Mask string itself
  * @param {String} [maskSymbol] Symbol in mask that will be interpreted as symbol to replace with typed value
+ * @param {Boolean} [showMask] Show unfilled part of mask or not
  * @param {RegExp} [customRegex] Regex expression to be evaluated upon typed value
  */
-function inputMask(element, mask, maskSymbol = '*', customRegex = /./) {
+function inputMask(element, mask, maskSymbol = '*', showMask = false, customRegex = /./) {
   try {
-    mask += ''; maskSymbol += ''; // Guard for non string values
+    mask += ''; maskSymbol += '';
 
     if (!(customRegex instanceof RegExp)) throw new Error('Regex object was not provided!');
     if (!mask.length) throw new Error('Wrong mask provided!');
     if (!maskSymbol.length) throw new Error('Wrong mask symbol provided');
 
-    // Format stuff
     customRegex = customRegex.source;
     maskSymbol = maskSymbol[0];
 
@@ -71,7 +69,7 @@ function inputMask(element, mask, maskSymbol = '*', customRegex = /./) {
 
     const maskStr = maskToRegex(mask, maskSymbol, customRegex);
     const rawInput = getRawInput(element.value, maskStr);
-    const resultStr = applyMask(rawInput, mask, maskSymbol);
+    const resultStr = applyMask(rawInput, mask, maskSymbol, showMask);
     element.value = resultStr;
 
     element.selectionEnd = setCursorPos(position, mask, maskSymbol); // ! Sometimes it selects one element, fix

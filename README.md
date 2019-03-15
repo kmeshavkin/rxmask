@@ -2,7 +2,7 @@
 ## Description
 Very simple to install and use mask for <input> made using regex.
 I decided against making it full blown module or library so it's a bit less practical, but that way I will not bloat this project too much.
-Testing is what really needed in this project, though I decided against using it just for simplicity's sake so I can move on to another project. Later I can get back to this project when I will be more experienced with modules, testing and other common practices, maybe evern making full-blown library out of this.
+Testing is what really needed in this project, though I decided against using it just for simplicity's sake so I can move on to another project. Later I can get back to this project when I will be more experienced with modules, testing and other common practices (also with fixing bugs), maybe even making full-blown library out of this.
 
 ## How to use
 Use this for <input> element, pass this into "oninput" event (this will replace all * symbols only with numbers from 1 to 5):
@@ -14,3 +14,8 @@ Currently I create GitHub projects only to practice JS stuff that I learned in t
 * Simple error handling and making code more robust in general (need to work on this more, seems subpar currently)
 * Tried JSDoc on one function, will dive into it further
 * Some of ES6 features (really like spread operator and default function parameters)
+
+## Known issues/bugs
+* Symbol deletion is not perfect, especially when there are symbols left after cursor. Due to this deleting symbols when (showMask == true) is not easy
+* Generated regular expression is sometimes not smart enough for pasted values, though works most of the time if value pasted is close enough to provided mask
+* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
