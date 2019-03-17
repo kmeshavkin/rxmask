@@ -21,4 +21,8 @@ Currently I create GitHub projects only to practice JS stuff that I learned in t
 * Generated regular expression is sometimes not smart enough for pasted values, though works most of the time if value pasted is close enough to provided mask
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
 * Although you are able to pass any regex expression in [customRegex] for type of replaceable symobols, I highly recommend you to pass only one symbol regex (in square brackets) and only symbols that are not presented in mask (for example, you can safely type "!" in mask like "(-----)", but not in mask like "(-----)!"), otherwise it can lead to unexpected results
+
+## TO-DO in future
 * Currently no support for custom regex for mask (where you can specify each symbol to make date mask, for example), which is a huge functionality reduction, but requires too much changes in current state - will get to it when I will come back to this project
+* Fixed mask start (where ir always displayed no matter what)
+* Expand a project to module with proper exports and test coverage (?)
