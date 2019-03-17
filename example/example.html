@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <script src="../src/rxmask.js"></script>
 </head>
+
 <body>
-  <input oninput="inputMask(this, '+7 (***) ***-**-**', '*', true)"></input>
+  <div>Phone mask</div>
+  <input oninput="inputMask(this, '***-**-**', '*')"></input>
+  <br /><code>oninput="inputMask(this, '***-**-**', '*')"</code>
+  <br /><br />
+
+  <div>Phone mask (showing whole mask including unfilled part)</div>
+  <input oninput="inputMask(this, '+7 (___) ___-__-__', '_', true)"></input>
+  <br /><code>oninput="inputMask(this, '+7 (___) ___-__-__', '_', true)"</code>
+  <br /><br />
+
+  <div>Mask where you can type only binary code of specified length</div>
+  <input oninput="inputMask(this, '.... .... .... ....', '.', false, /[01]/)"></input>
+  <br /><code>oninput="inputMask(this, '.... .... .... ....', '.', false, /[01]/)"</code>
+  <br /><br />
 </body>
+
 </html>
