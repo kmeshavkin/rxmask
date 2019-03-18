@@ -44,7 +44,8 @@ function inputMask(element, mask, maskSymbol = '*', showMask = false, customRege
     const resultStr = applyMask(rawInput, mask, maskSymbol, showMask);
     element.value = resultStr;
 
-    element.selectionEnd = setCursorPos(position, mask, maskSymbol); // ! Sometimes it selects one element, fix
+    element.selectionEnd = element.selectionStart = setCursorPos(position, mask, maskSymbol);
+    console.log(element.selectionStart, element.selectionEnd);
   } catch (e) {
     console.log(e);
   }

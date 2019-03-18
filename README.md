@@ -17,7 +17,7 @@ Currently I create GitHub projects only to practice JS stuff that I learned in t
 * Some of ES6 features (really like spread operator and default function parameters)
 
 ## Known issues/bugs
-* Symbol deletion is not perfect, especially when there are symbols left after cursor. Due to this deleting symbols when [showMask] == true is not easy
+* Symbol deletion is not perfect, especially when there are symbols left after cursor. Due to this deleting symbols when [showMask] == true is not easy and even without it it sometimes works not as expected
 * Generated regular expression is sometimes not smart enough for pasted values, though works most of the time if value pasted is close enough to provided mask
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
 * Although you are able to pass any regex expression in [customRegex] for type of replaceable symobols, I highly recommend you to pass only one symbol regex (in square brackets) and only symbols that are not presented in mask (for example, you can safely type "!" in mask like "(-----)", but not in mask like "(-----)!"), otherwise it can lead to unexpected results
