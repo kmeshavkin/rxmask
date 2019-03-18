@@ -6,7 +6,7 @@ I decided against making it full blown module or library so it's a bit less prac
 Testing is what really needed in this project, though I decided against using it just for simplicity's sake so I can move on to another project. Later I can get back to this project when I will be more experienced with modules, testing and other common practices (also with fixing bugs), maybe even making full-blown library out of this.
 
 ## How to use
-Use this for <input> element, pass this into "oninput" event (this will replace all * symbols only with numbers from 1 to 5):
+Use this for <input> element, pass this into "oninput" event (this will replace all * characters only with numbers from 1 to 5):
 <input oninput="inputMask(this, '+7 (***) ***-**-**', '*', /[1-5]/)"></input>
 
 ## Project focus
@@ -17,10 +17,10 @@ Currently I create GitHub projects only to practice JS stuff that I learned in t
 * Some of ES6 features (really like spread operator and default function parameters)
 
 ## Known issues/bugs
-* Symbol deletion is not perfect, especially when there are symbols left after cursor. Due to this deleting symbols when [showMask] == true is not easy and even without it it sometimes works not as expected
+* Symbol deletion is not perfect, especially when there are characters left after cursor. Due to this deleting characters when [showMask] == true is not easy and even without it it sometimes works not as expected
 * Generated regular expression is sometimes not smart enough for pasted values, though works most of the time if value pasted is close enough to provided mask
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
-* Although you are able to pass any regex expression in [customRegex] for type of replaceable symobols, I highly recommend you to pass only one symbol regex (in square brackets) and only symbols that are not presented in mask (for example, you can safely type "!" in mask like "(-----)", but not in mask like "(-----)!"), otherwise it can lead to unexpected results
+* Although you are able to pass any regex expression in [customRegex] for type of replaceable symobols, I highly recommend you to pass only one symbol regex (in square brackets) and only characters that are not presented in mask (for example, you can safely type "!" in mask like "(-----)", but not in mask like "(-----)!"), otherwise it can lead to unexpected results
 
 ## TO-DO in future
 * Currently no support for custom regex for mask (where you can specify each symbol to make date mask, for example), which is a huge functionality reduction, but requires too much changes in current state - will get to it when I will come back to this project
