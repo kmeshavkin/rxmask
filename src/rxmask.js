@@ -9,9 +9,9 @@
  * // Will return this expression: /(?:\[)?([01]{0,3})(?:\])?/
  */
 function maskToRegex(mask, maskSymbol, customRegex) {
-  const regexArr = mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`))
-      .map((el) => replaceSymbol(el, maskSymbol, customRegex));
-  return RegExp(regexArr.join(''));
+  return mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`))
+      .map((el) => replaceSymbol(el, maskSymbol, customRegex))
+      .join('');
 }
 
 /**
