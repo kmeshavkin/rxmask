@@ -24,7 +24,7 @@ function maskToRegex(mask, maskSymbol, customRegex) {
  * @param {RegExp} [customRegex] Regex expression to be evaluated upon every replaceable symbol
  * @example
  * // Will replace all * symbols only with numbers from 1 to 5
- * <input oninput="inputMask(this, '+7 (***) ***-**-**', '*', /[1-5]/)"></input>
+ * <input oninput="inputMask(this, '+7 (***) ***-**-**', '*', true, /[1-5]/)"></input>
  */
 function inputMask(element, mask, maskSymbol = '*', showMask = false, customRegex = /\d/) {
   try {
@@ -45,7 +45,6 @@ function inputMask(element, mask, maskSymbol = '*', showMask = false, customRege
     element.value = resultStr;
 
     element.selectionEnd = element.selectionStart = setCursorPos(position, mask, maskSymbol);
-    console.log(element.selectionStart, element.selectionEnd);
   } catch (e) {
     console.log(e);
   }
