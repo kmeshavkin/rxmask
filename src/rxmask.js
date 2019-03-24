@@ -30,8 +30,8 @@ function inputMask(element, mask, maskSymbol = '*', showMask = false, customRege
     mask += ''; maskSymbol += '';
 
     if (!(customRegex instanceof RegExp)) throw new Error('Regex object was not provided!');
-    if (!mask.length) throw new Error('Wrong mask provided!');
-    if (!maskSymbol.length) throw new Error('Wrong mask symbol provided');
+    if (!(mask instanceof String)) throw new Error('Wrong mask provided!');
+    if (!(maskSymbol instanceof String)) throw new Error('Wrong mask symbol provided');
 
     customRegex = customRegex.source;
     maskSymbol = maskSymbol[0];
