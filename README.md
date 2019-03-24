@@ -7,6 +7,7 @@ Testing is what really needed in this project, though I decided against using it
 
 ## How to use
 Use this for <input> element, pass this into "oninput" event (this will replace all * characters only with numbers from 1 to 5):
+
 `<input oninput="inputMask(this, '+7 (***) ***-**-**', '*', /[1-5]/)"></input>`
 
 ## Project focus
