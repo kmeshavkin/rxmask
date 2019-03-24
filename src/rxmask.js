@@ -1,20 +1,4 @@
 /**
- * Returns regular expression based on input parameters.
- * @param {String} mask Input string mask
- * @param {String} maskSymbol Character that represents a replaceable character in mask (should be one character long)
- * @param {String} customRegex Regular expression in raw string form to be applied to every replaceable character
- * @return {RegExp} Returns regular expression. You can use this expression to later extract raw input from string
- * @example
- * maskToRegex('[***]', '*', '[01]')
- * // Will return this expression: /(?:\[)?([01]{0,3})(?:\])?/
- */
-function maskToRegex(mask, maskSymbol, customRegex) {
-  return mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`))
-      .map((el) => replaceSymbol(el, maskSymbol, customRegex))
-      .join('');
-}
-
-/**
  * Use this for <input> element, pass this into "oninput" event.
  * @param {Object} element Pass {this} into this parameter, it operates provided input
  * @param {String} mask Mask string itself
@@ -47,6 +31,22 @@ function inputMask(element, mask, maskSymbol = '*', showMask = false, customRege
   } catch (e) {
     console.log(e);
   }
+}
+
+/**
+ * Returns regular expression based on input parameters.
+ * @param {String} mask Input string mask
+ * @param {String} maskSymbol Character that represents a replaceable character in mask (should be one character long)
+ * @param {String} customRegex Regular expression in raw string form to be applied to every replaceable character
+ * @return {RegExp} Returns regular expression. You can use this expression to later extract raw input from string
+ * @example
+ * maskToRegex('[***]', '*', '[01]')
+ * // Will return this expression: /(?:\[)?([01]{0,3})(?:\])?/
+ */
+function maskToRegex(mask, maskSymbol, customRegex) {
+  return mask.split(RegExp(`(${regexLiteral(maskSymbol)}+)`))
+      .map((el) => replaceSymbol(el, maskSymbol, customRegex))
+      .join('');
 }
 
 function getRawInput(input, mask) {
