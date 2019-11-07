@@ -8,10 +8,14 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
-    "eslint": "^5.15.1",
-    "eslint-config-google": "^0.12.0"
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.12.0",
+    "typescript": "^3.7.2"
   },
   "repository": {
     "type": "git",

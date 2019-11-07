@@ -1,32 +1,36 @@
-(function processInputs() {
-  const DOMInputs = document.getElementsByClassName('rxmask');
-  const inputs = [];
-  // // @ts-ignore
-  // window.test = inputs;
-  for (let i = 0; i < DOMInputs.length; i++) {
-    inputs.push(new Input(DOMInputs[i]));
+class Input {
+  mask: string;
+  maskSymbol: string;
+  value: string;
+  cursorPos: number;
+  output: string;
+
+  constructor(mask: string, maskSymbol: string, value: string, cursorPos: number) {
+    this.mask = mask;
+    this.maskSymbol = maskSymbol;
+    this.value = value;
+    this.cursorPos = cursorPos;
+    this.output = '';
   }
-})();
 
-function Input(input) {
-  this.input = input;
-  this.prevValue = '';
+  onChange() {
+    const parsedMask = this.getParsedMask(this.mask, this.maskSymbol);
+    const rawValue = this.getRawValue(this.value, parsedMask);
+    this.output = this.getOutput(rawValue, this.mask, this.maskSymbol);
+  }
 
-  input.oninput = () => {
-    const mask = input.getAttribute('mask');
-    const maskSymbol = input.getAttribute('maskSymbol');
-    let cursorPos = input.selectionStart;
-    const parsedMask = parseMask(mask, maskSymbol);
 
-    let tempParsedMask = parsedMask;
-    let rawValue = input.value.split('').reduce((acc, c) => {
-      if (tempParsedMask[0] === c) {
-        tempParsedMask = tempParsedMask.slice(1);
+  getRawValue(inputValue: string, parsedMask: string): string {
+    return inputValue.split('').reduce((acc, char) => {
+      if (parsedMask[0] === char) {
+        parsedMask = parsedMask.slice(1);
         return acc;
       }
-      return acc + c;
+      return acc + char;
     }, '');
+  }
 
+  getOutput(rawValue: string, mask: string, maskSymbol: string) {
     let output = '';
     const splMask = mask.split('');
     for (let i = 0; i < splMask.length; i++) {
@@ -36,20 +40,37 @@ function Input(input) {
         rawValue = rawValue.slice(1);
       } else {
         output += splMask[i];
-        cursorPos++;
+        this.cursorPos++;
       }
     }
-    input.value = output;
-    input.setSelectionRange(cursorPos, cursorPos);
-    // End
-    this.prevValue = input.value;
-  };
+    return output;
+  }
+
+  getParsedMask(mask: string, maskSymbol = '*') {
+    return mask.replace(new RegExp(this.regexLiteral(maskSymbol), 'g'), '');
+  }
+
+  regexLiteral(str: string) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
 }
 
-function parseMask(mask, maskSymbol = '*') {
-  return mask.replace(new RegExp(regexLiteral(maskSymbol), 'g'), '');
-}
+(function processInputs() {
+  const DOMInputs = <HTMLCollectionOf<HTMLTextAreaElement>>document.getElementsByClassName('rxmask');
+  const inputs = [];
+  for (let i = 0; i < DOMInputs.length; i++) {
+    const input = DOMInputs[i];
+    input.oninput = () => {
+      const mask = input.getAttribute('mask') || '';
+      const maskSymbol = input.getAttribute('maskSymbol') || '*';
+      const value = input.value;
+      const cursorPos = input.selectionStart;
 
-function regexLiteral(rx) {
-  return rx.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+      const inputObj = new Input(mask, maskSymbol, value, cursorPos);
+      inputObj.onChange();
+      input.value = inputObj.output;
+      input.setSelectionRange(inputObj.cursorPos, inputObj.cursorPos);
+    };
+    inputs.push(input);
+  }
+})();

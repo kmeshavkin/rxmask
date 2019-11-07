@@ -1,3 +1,9 @@
+# Fix
+* Current class structure looks confusing
+* You can't write symbol that exists in mask before that symbol in mask - causes bugs
+
+# Old stuff, redo
+
 # rxmask.js
 ## Description
 Very simple to install and use mask for <input> made using regex.
