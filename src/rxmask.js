@@ -11,67 +11,64 @@ class Input {
     }
     onChange() {
         // const parsedMask = this.getParsedMask(this.mask, this.maskSymbol);
-        const rawValue = this.getRawValue(this.value, this.mask, this.cursorPos, this.prevValue);
-        this.output = this.getOutput(rawValue, this.mask, this.maskSymbol);
+        const rawValue = this.getRawValue();
+        this.output = this.getOutput(rawValue);
         this.prevValue = this.output;
     }
-    getRawValue(inputValue, mask, cursorPos, prevValue) {
+    getRawValue() {
         // Get length diff between old and current value
-        const diff = inputValue.length - prevValue.length;
+        const diff = this.value.length - this.prevValue.length;
         // Get value before cursor without mask symbols
         let partialOutput = '';
-        for (let i = 0; i < inputValue.length; i++) {
-            if (inputValue[i] !== mask[i]) {
-                if (i < cursorPos)
-                    partialOutput += inputValue[i];
-            }
-            else if (i === inputValue.length - 1) {
-                this.addSymbol = true;
+        for (let i = 0; i < this.value.length; i++) {
+            if (this.value[i] !== this.mask[i] && i < this.cursorPos) {
+                partialOutput += this.value[i];
             }
         }
         // Get value after before cursor
-        const inputAfterCursor = inputValue.slice(cursorPos);
+        const inputAfterCursor = this.value.slice(this.cursorPos);
         // Get value after before cursor without mask symbols
         let parsedInputAfterCursor = '';
         for (let i = 0; i < inputAfterCursor.length; i++) {
-            if (inputAfterCursor[i] !== mask[i + cursorPos - diff]) {
+            if (inputAfterCursor[i] !== this.mask[i + this.cursorPos - diff]) {
                 parsedInputAfterCursor += inputAfterCursor[i];
             }
         }
-        console.log('cursorPos: ', cursorPos);
-        console.log('partialOutput: ', partialOutput);
-        console.log('inputValue: ', inputValue);
-        console.log('inputAfterCursor: ', inputAfterCursor);
-        console.log('parsedInputAfterCursor: ', parsedInputAfterCursor);
-        console.log('prevValue: ', prevValue);
-        console.log('diff: ', diff);
-        console.log('this.addSymbol: ', this.addSymbol);
+        // console.log('this.cursorPos: ', this.cursorPos);
+        // console.log('partialOutput: ', partialOutput);
+        // console.log('this.value: ', this.value);
+        // console.log('inputAfterCursor: ', inputAfterCursor);
+        // console.log('parsedInputAfterCursor: ', parsedInputAfterCursor);
+        // console.log('this.prevValue: ', this.prevValue);
+        // console.log('diff: ', diff);
+        // console.log('this.addSymbol: ', this.addSymbol);
         return partialOutput + parsedInputAfterCursor;
     }
-    // paste 12-3-456- - still weird
-    // 123-45-6
-    // cursor after 5
-    // add symbol
-    // wrong cursor position (this.cursorPos++ causes this)
-    // implement addSymbol for case like this: mask: ***-**-**, input: ---, add another -, should become -----
-    getOutput(rawValue, mask, maskSymbol) {
+    // 123
+    // cursor after 2
+    // paste 123
+    // wrong cursor position
+    // --- still works wrong
+    getOutput(rawValue) {
         let output = '';
-        for (let i = 0; i < mask.length; i++) {
+        for (let i = 0; i < this.mask.length; i++) {
             if (rawValue.length === 0)
                 break;
-            if (mask[i] === maskSymbol) {
+            if (this.mask[i] === this.maskSymbol) {
                 output += rawValue[0];
                 rawValue = rawValue.slice(1);
             }
-            else if (mask[i] === rawValue[0]) {
-                output += mask[i];
+            else if (this.mask[i] === rawValue[0]) {
+                output += this.mask[i];
                 rawValue = rawValue.slice(1);
             }
             else {
-                output += mask[i];
-                this.cursorPos++;
+                output += this.mask[i];
             }
         }
+        const diff = output.length - this.prevValue.length - 1;
+        if (diff > 0)
+            this.cursorPos += diff;
         return output;
     }
     getParsedMask(mask, maskSymbol = '*') {
