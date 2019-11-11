@@ -7,10 +7,10 @@ class Input {
         this.cursorPos = 0;
         this.output = '';
         this.prevValue = '';
-        this.addSymbol = false;
+        this.allowedSymbols = /./;
+        this.showMask = false;
     }
-    onChange() {
-        // const parsedMask = this.getParsedMask(this.mask, this.maskSymbol);
+    parseMask() {
         const rawValue = this.getRawValue();
         this.output = this.getOutput(rawValue);
         this.prevValue = this.output;
@@ -41,26 +41,31 @@ class Input {
         // console.log('parsedInputAfterCursor: ', parsedInputAfterCursor);
         // console.log('this.prevValue: ', this.prevValue);
         // console.log('diff: ', diff);
-        // console.log('this.addSymbol: ', this.addSymbol);
-        return partialOutput + parsedInputAfterCursor;
+        return ((partialOutput + parsedInputAfterCursor).match(this.allowedSymbols) || []).join('');
     }
     // 123
     // cursor after 2
     // paste 123
     // wrong cursor position
+    // 123-1
+    // cursor after 3, before -
+    // paste 2
+    // wrong cursor position
+    // If showMask === true, cursor position is wrong
     // --- still works wrong
     getOutput(rawValue) {
         let output = '';
         for (let i = 0; i < this.mask.length; i++) {
-            if (rawValue.length === 0)
-                break;
             if (this.mask[i] === this.maskSymbol) {
-                output += rawValue[0];
-                rawValue = rawValue.slice(1);
-            }
-            else if (this.mask[i] === rawValue[0]) {
-                output += this.mask[i];
-                rawValue = rawValue.slice(1);
+                if (rawValue.length === 0) {
+                    if (!this.showMask)
+                        break;
+                    output += this.mask[i];
+                }
+                else {
+                    output += rawValue[0];
+                    rawValue = rawValue.slice(1);
+                }
             }
             else {
                 output += this.mask[i];
@@ -70,9 +75,6 @@ class Input {
         if (diff > 0)
             this.cursorPos += diff;
         return output;
-    }
-    getParsedMask(mask, maskSymbol = '*') {
-        return mask.replace(new RegExp(this.regexLiteral(maskSymbol), 'g'), '');
     }
     regexLiteral(str) {
         return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -85,15 +87,19 @@ class Input {
         const input = DOMInputs[i];
         const inputObj = new Input();
         inputs.push(inputObj);
-        input.oninput = () => {
-            inputObj.mask = input.getAttribute('mask') || '';
-            inputObj.maskSymbol = input.getAttribute('maskSymbol') || '*';
-            inputObj.value = input.value;
-            inputObj.cursorPos = input.selectionStart;
-            inputObj.onChange();
-            //
-            input.value = inputObj.output;
-            input.setSelectionRange(inputObj.cursorPos, inputObj.cursorPos);
-        };
+        onInput(input, inputObj);
+        input.oninput = () => onInput(input, inputObj);
     }
 })();
+function onInput(input, inputObj) {
+    inputObj.mask = input.getAttribute('mask') || '';
+    inputObj.maskSymbol = input.getAttribute('maskSymbol') || '*';
+    inputObj.allowedSymbols = new RegExp(input.getAttribute('allowedSymbols') || '.', 'g');
+    inputObj.showMask = Boolean(input.getAttribute('showMask')) || false;
+    inputObj.value = input.value;
+    inputObj.cursorPos = input.selectionStart;
+    inputObj.parseMask();
+    //
+    input.value = inputObj.output;
+    input.setSelectionRange(inputObj.cursorPos, inputObj.cursorPos);
+}
