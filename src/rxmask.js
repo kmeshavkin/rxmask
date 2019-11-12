@@ -4,11 +4,12 @@ class Input {
         this.mask = '';
         this.maskSymbol = '';
         this.value = '';
-        this.cursorPos = 0;
-        this.output = '';
         this.prevValue = '';
+        this.output = '';
+        this.cursorPos = 0;
         this.allowedSymbols = /./;
         this.showMask = false;
+        this.isAdding = true;
     }
     parseMask() {
         const rawValue = this.getRawValue();
@@ -18,6 +19,7 @@ class Input {
     getRawValue() {
         // Get length diff between old and current value
         const diff = this.value.length - this.prevValue.length;
+        this.isAdding = diff >= 0;
         // Get value before cursor without mask symbols
         let partialOutput = '';
         for (let i = 0; i < this.value.length; i++) {
@@ -43,18 +45,12 @@ class Input {
         // console.log('diff: ', diff);
         return ((partialOutput + parsedInputAfterCursor).match(this.allowedSymbols) || []).join('');
     }
-    // 123
-    // cursor after 2
-    // paste 123
-    // wrong cursor position
-    // 123-1
-    // cursor after 3, before -
-    // paste 2
-    // wrong cursor position
     // If showMask === true, cursor position is wrong
-    // --- still works wrong
+    // Place cursor before - in ***-**-**, press delete - nothing happens
+    // Maybe if mask is completed, disallow adding symbols? 
     getOutput(rawValue) {
         let output = '';
+        const prevCursorPos = this.cursorPos;
         for (let i = 0; i < this.mask.length; i++) {
             if (this.mask[i] === this.maskSymbol) {
                 if (rawValue.length === 0) {
@@ -65,15 +61,16 @@ class Input {
                 else {
                     output += rawValue[0];
                     rawValue = rawValue.slice(1);
+                    if (rawValue.length === 0 && !this.isAdding && !this.showMask)
+                        break; // if deleting symbols or not
                 }
             }
             else {
                 output += this.mask[i];
+                if (this.isAdding && i <= prevCursorPos)
+                    this.cursorPos++;
             }
         }
-        const diff = output.length - this.prevValue.length - 1;
-        if (diff > 0)
-            this.cursorPos += diff;
         return output;
     }
     regexLiteral(str) {
