@@ -1,6 +1,3 @@
-# Fix
-* Current class structure looks confusing
-
 # Old stuff, redo
 
 # rxmask.js

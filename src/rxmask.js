@@ -2,14 +2,14 @@
 class Input {
     constructor() {
         this.mask = '';
-        this.maskSymbol = '';
+        this.symbol = '';
         this.value = '';
-        this.prevValue = '';
         this.output = '';
+        this.prevValue = '';
+        this.diff = 0;
         this.cursorPos = 0;
         this.allowedSymbols = /./;
         this.showMask = false;
-        this.isAdding = true;
     }
     parseMask() {
         const rawValue = this.getRawValue();
@@ -19,7 +19,7 @@ class Input {
     getRawValue() {
         // Get length diff between old and current value
         const diff = this.value.length - this.prevValue.length;
-        this.isAdding = diff >= 0;
+        this.diff = diff;
         // Get value before cursor without mask symbols
         let partialOutput = '';
         for (let i = 0; i < this.value.length; i++) {
@@ -45,14 +45,13 @@ class Input {
         // console.log('diff: ', diff);
         return ((partialOutput + parsedInputAfterCursor).match(this.allowedSymbols) || []).join('');
     }
-    // If showMask === true, cursor position is wrong
+    // If showMask === true, cursor position is wrong (place cursor in the middle of mask and paste symbols)
     // Place cursor before - in ***-**-**, press delete - nothing happens
-    // Maybe if mask is completed, disallow adding symbols? 
     getOutput(rawValue) {
         let output = '';
         const prevCursorPos = this.cursorPos;
         for (let i = 0; i < this.mask.length; i++) {
-            if (this.mask[i] === this.maskSymbol) {
+            if (this.mask[i] === this.symbol) {
                 if (rawValue.length === 0) {
                     if (!this.showMask)
                         break;
@@ -61,15 +60,22 @@ class Input {
                 else {
                     output += rawValue[0];
                     rawValue = rawValue.slice(1);
-                    if (rawValue.length === 0 && !this.isAdding && !this.showMask)
-                        break; // if deleting symbols or not
+                    // This allows to add mask symbol after if user is adding symbols and delete mask symbol if user deletes symbols
+                    if (rawValue.length === 0 && this.diff < 0 && !this.showMask)
+                        break;
                 }
             }
             else {
                 output += this.mask[i];
-                if (this.isAdding && i <= prevCursorPos)
+                // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
+                if (i >= prevCursorPos - this.diff && i <= this.cursorPos)
                     this.cursorPos++;
             }
+        }
+        // Stop user from adding symbols after mask is completed
+        if (rawValue.length > 0) {
+            this.cursorPos = prevCursorPos - this.diff;
+            return this.prevValue;
         }
         return output;
     }
@@ -90,7 +96,7 @@ class Input {
 })();
 function onInput(input, inputObj) {
     inputObj.mask = input.getAttribute('mask') || '';
-    inputObj.maskSymbol = input.getAttribute('maskSymbol') || '*';
+    inputObj.symbol = input.getAttribute('symbol') || '*';
     inputObj.allowedSymbols = new RegExp(input.getAttribute('allowedSymbols') || '.', 'g');
     inputObj.showMask = Boolean(input.getAttribute('showMask')) || false;
     inputObj.value = input.value;
