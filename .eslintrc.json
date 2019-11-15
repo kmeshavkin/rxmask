@@ -3,18 +3,18 @@
     "browser": true,
     "es6": true
   },
-  "extends": "google",
+  "extends": ["google", "plugin:prettier/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "tsconfig.json",
     "tsconfigRootDir": "."
   },
   "plugins": [
-    "@typescript-eslint/eslint-plugin"
+    "@typescript-eslint/eslint-plugin",
+    "prettier"
   ],
   "rules": {
     "require-jsdoc": 0,
-    "max-len": 0,
     "no-unused-vars": 0
   }
 }
