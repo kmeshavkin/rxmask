@@ -5,7 +5,7 @@ class Input {
         this.symbol = '';
         this.rxmask = [];
         this.allowedSymbols = '.';
-        this.showMask = false;
+        this.showMask = 0;
         this.value = '';
         this.cursorPos = 0;
         // Private properties
@@ -86,9 +86,9 @@ class Input {
                         this.cursorPos++;
                 }
             }
-            else if (this.showMask) {
+            else if (this.showMask > i) {
                 output += this.rxmask[i].match(/\[.*\]/) ? this.symbol : this.rxmask[i];
-                // If showMask is on, cursor should be moved to the position just next to last symbol from parsedValue
+                // If showMask is greater than parsed value length, cursor should be moved to the position just next to last symbol from parsedValue
                 if (!movedCursorPos && this.cursorPos > i && this._diff > 0) {
                     this.cursorPos = i;
                     movedCursorPos = true;
@@ -123,7 +123,7 @@ function onInput(input, inputObj) {
     inputObj.symbol = input.getAttribute('symbol') || '*';
     inputObj.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
     inputObj.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-    inputObj.showMask = Boolean(input.getAttribute('showMask')) || false;
+    inputObj.showMask = input.getAttribute('showMask') === "true" ? Infinity : Number(input.getAttribute('showMask'));
     inputObj.value = input.value;
     inputObj.cursorPos = input.selectionStart;
     // Call parser
