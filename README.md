@@ -7,6 +7,7 @@
 # Bugs
 * Place cursor before - in ***-**-**, press delete - nothing happens
 * If maskSymbol includes "symbol" property itself, cursor will move
+* "Stop user from adding symbols after mask is completed" is bugged for CTRL+V (if pasting adds to much symbols, it will not be added)
 
 # Features?
 * Both module and simple HTML script
