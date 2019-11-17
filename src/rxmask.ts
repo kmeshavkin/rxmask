@@ -30,7 +30,7 @@ class Input {
   parseMask() {
     const noMaskValue = this.parseOutMask();
     const parsedValue = this.parseAllowedValue(noMaskValue);
-    this._output = this.getOutput(parsedValue);
+    this._output = this.getOutput(parsedValue, this.cursorPos);
     this._prevValue = this._output;
   }
 
@@ -77,37 +77,42 @@ class Input {
     return parsedValue;
   }
 
-  getOutput(parsedValue: string) {
+  getOutput(parsedValue: string, prevCursorPos: number) {
     let output = '';
-    const prevCursorPos = this.cursorPos;
+    let movedCursorPos = false;
+
     for (let i = 0; i < this.mask.length; i++) {
-      if (this.mask[i] === this.symbol) {
-        if (parsedValue.length === 0) {
-          if (!this.showMask) break;
-          output += this.mask[i];
-        } else {
+      if (parsedValue.length > 0) {
+        if (this.mask[i] === this.symbol) {
           output += parsedValue[0];
           parsedValue = parsedValue.slice(1);
-          // This allows to add mask symbol after if user is adding symbols and delete mask symbol if user deletes symbols
-          if (parsedValue.length === 0 && this._diff < 0 && !this.showMask) break;
+        } else {
+          output += this.mask[i];
+          // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
+          if (i < this.cursorPos && i >= prevCursorPos - this._diff) this.cursorPos++;
         }
-      } else {
+      } else if (this.showMask) {
         output += this.mask[i];
-        // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
-        if (i >= prevCursorPos - this._diff && i <= this.cursorPos) this.cursorPos++;
+        // If showMask is on, cursor should be moved to the position just next to last symbol from parsedValue
+        if (!movedCursorPos && this.cursorPos > i) {
+          this.cursorPos = i;
+          movedCursorPos = true;
+        }
       }
     }
+
     // Stop user from adding symbols after mask is completed
     if (parsedValue.length > 0) {
       this.cursorPos = prevCursorPos - this._diff;
       return this._prevValue;
     }
+
     return output;
   }
+}
 
-  regexLiteral(str: string) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
+function regexLiteral(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 (function processInputs() {
@@ -130,8 +135,9 @@ function onInput(input: HTMLTextAreaElement, inputObj: Input) {
   inputObj.showMask = Boolean(input.getAttribute('showMask')) || false;
   inputObj.value = input.value;
   inputObj.cursorPos = input.selectionStart;
+  // Call parser
   inputObj.parseMask();
-  //
+  // Everything is parsed, set output and cursorPos
   input.value = inputObj.output;
   input.setSelectionRange(inputObj.cursorPos, inputObj.cursorPos);
 }

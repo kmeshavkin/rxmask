@@ -5,8 +5,8 @@
 * Add UI testing (Cypress?)
 
 # Bugs
-* If showMask === true, cursor position is wrong (place cursor in the middle of mask and paste symbols)
 * Place cursor before - in ***-**-**, press delete - nothing happens
+* If maskSymbol includes "symbol" property itself, cursor will move
 
 # Features?
 * Both module and simple HTML script
