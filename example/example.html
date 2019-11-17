@@ -6,19 +6,24 @@
 </head>
 
 <body>
-  <div>Phone mask (specify mask, mask symbol and allowed symbols)</div>
+  <div>Phone mask - specify mask, mask symbol and allowed symbols</div>
   <input class="rxmask" mask="***-**-**" symbol="*" allowedSymbols="[0-9]"></input>
   <br /><code>class="rxmask" mask="***-**-**" symbol="*" allowedSymbols="[0-9]"</code>
   <br /><br />
 
-  <div>Phone mask (showing whole mask including unfilled part)</div>
+  <div>Phone mask - showing whole mask including unfilled part</div>
   <input class="rxmask" mask="+_ (___) ___-__-__" symbol="_" showMask="true" allowedSymbols="[0-9]"></input>
   <br /><code>class="rxmask" mask="+7 (___) ___-__-__" symbol="_" showMask="true" allowedSymbols="[0-9]"</code>
   <br /><br />
 
-  <div>Phone mask, but only for special characters (allowedSymbols can include symbols from mask EXCEPT, "symbol" property itself, note that special symbols should be escaped)</div>
+  <div>Phone mask, but only for special characters - allowedSymbols can include symbols from mask EXCEPT "symbol" property itself (note that special symbols should be escaped)</div>
   <input class="rxmask" mask="+_ (___) ___-__-__" symbol="_" showMask="true" allowedSymbols="[_ \-\+\(\)]"></input>
   <br /><code>class="rxmask" mask="+7 (___) ___-__-__" symbol="_" showMask="true" allowedSymbols="[_ \-\+\(\)]"</code>
+  <br /><br />
+
+  <div>Regex mask - only certain symbols are allowed for each character (you don't need to specify "mask" property if "rxmask" is present (it will be ignored))</div>
+  <input class="rxmask" rxmask="[A-Z][A-Z] [\d][\d][\d]-[a-z][\d]" symbol="*" showMask="true"></input>
+  <br /><code>class="rxmask" rxmask="[A-Z][A-Z] [\d][\d][\d]-[a-z][\d]" symbol="*" showMask="true"</code>
   <br /><br />
 </body>
 </html>

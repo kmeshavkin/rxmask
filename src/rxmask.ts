@@ -1,9 +1,10 @@
 class Input {
   mask: string;
   symbol: string;
+  rxmask: string[];
   value: string;
   cursorPos: number;
-  allowedSymbols: RegExp;
+  allowedSymbols: string;
   showMask: boolean;
 
   private _output: string;
@@ -13,7 +14,8 @@ class Input {
   constructor() {
     this.mask = '';
     this.symbol = '';
-    this.allowedSymbols = /./;
+    this.rxmask = [];
+    this.allowedSymbols = '.';
     this.showMask = false;
     this.value = '';
     this.cursorPos = 0;
@@ -28,6 +30,12 @@ class Input {
   }
 
   parseMask() {
+    if (this.rxmask.length === 0) {
+      this.rxmask = this.mask.split('').map(char => {
+        if (char === this.symbol) return '[^]';
+        return char;
+      });
+    }
     const noMaskValue = this.parseOutMask();
     const parsedValue = this.parseAllowedValue(noMaskValue);
     this._output = this.getOutput(parsedValue, this.cursorPos);
@@ -46,7 +54,7 @@ class Input {
     // Get value before cursor without mask symbols
     let beforeCursor = '';
     for (let i = 0; i < this.value.length; i++) {
-      if (this.value[i] !== this.mask[i] && i < this.cursorPos) {
+      if (this.value[i] !== this.rxmask[i] && this.value[i] !== this.symbol && i < this.cursorPos) {
         beforeCursor += this.value[i];
       }
     }
@@ -55,7 +63,10 @@ class Input {
     let afterCursor = '';
     for (let i = 0; i < this.value.length - this.cursorPos; i++) {
       // Diff used here to "shift" mask to position where it supposed to be
-      if (this.value[i + this.cursorPos] !== this.mask[i + this.cursorPos - diff]) {
+      if (
+        this.value[i + this.cursorPos] !== this.rxmask[i + this.cursorPos - diff] &&
+        this.value[i + this.cursorPos] !== this.symbol
+      ) {
         afterCursor += this.value[i + this.cursorPos];
       }
     }
@@ -65,12 +76,14 @@ class Input {
 
   parseAllowedValue(noMaskValue: string) {
     let parsedValue = '';
+    const rxmask = this.rxmask.filter(pattern => pattern.match(/\[.*\]/));
     for (let i = 0; i < noMaskValue.length; i++) {
-      if (noMaskValue[i].match(this.allowedSymbols)) {
+      if (noMaskValue[i].match(this.allowedSymbols) && noMaskValue[i].match(new RegExp(rxmask[i]))) {
         parsedValue += noMaskValue[i];
       } else {
         // This line returns cursor to appropriate position according to removed elements
         this.cursorPos--;
+        this._diff--;
       }
     }
 
@@ -81,20 +94,20 @@ class Input {
     let output = '';
     let movedCursorPos = false;
 
-    for (let i = 0; i < this.mask.length; i++) {
+    for (let i = 0; i < this.rxmask.length; i++) {
       if (parsedValue.length > 0) {
-        if (this.mask[i] === this.symbol) {
+        if (this.rxmask[i].match(/\[.*\]/)) {
           output += parsedValue[0];
           parsedValue = parsedValue.slice(1);
         } else {
-          output += this.mask[i];
+          output += this.rxmask[i];
           // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
           if (i < this.cursorPos && i >= prevCursorPos - this._diff) this.cursorPos++;
         }
       } else if (this.showMask) {
-        output += this.mask[i];
+        output += this.rxmask[i].match(/\[.*\]/) ? this.symbol : this.rxmask[i];
         // If showMask is on, cursor should be moved to the position just next to last symbol from parsedValue
-        if (!movedCursorPos && this.cursorPos > i) {
+        if (!movedCursorPos && this.cursorPos > i && this._diff > 0) {
           this.cursorPos = i;
           movedCursorPos = true;
         }
@@ -131,7 +144,8 @@ function onInput(input: HTMLTextAreaElement, inputObj: Input) {
   // Assign params every time in case it changes on the fly
   inputObj.mask = input.getAttribute('mask') || '';
   inputObj.symbol = input.getAttribute('symbol') || '*';
-  inputObj.allowedSymbols = new RegExp(input.getAttribute('allowedSymbols') || '.');
+  inputObj.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
+  inputObj.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
   inputObj.showMask = Boolean(input.getAttribute('showMask')) || false;
   inputObj.value = input.value;
   inputObj.cursorPos = input.selectionStart;
