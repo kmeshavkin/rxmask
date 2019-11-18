@@ -7,10 +7,10 @@ before(() => {
 
 describe('Simple input', () => {
   afterEach(() => {
-    cy.get('input')[0].clear();
+    cy.get('input.simple').clear();
   });
   it('should correctly apply mask for simple typing', () => {
-    cy.get('input')[0]
+    cy.get('input.simple')
       .type('123')
       .should('have.value', '123')
       .type('4')
@@ -24,7 +24,7 @@ describe('Simple input', () => {
   });
 
   it('should not allow to add more symbols after mask is complete', () => {
-    cy.get('input')[0]
+    cy.get('input.simple')
       .type('123-45-67')
       .should('have.value', '123-45-67')
       .type('1')
