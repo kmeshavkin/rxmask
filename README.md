@@ -6,7 +6,7 @@
 * Allows to specify format for every symbol
 
 ## Description (outdated, update)
-Simple to install and use, but advanced mask for <input>.
+Simple to install and use, but advanced mask package.
 
 ## How to use (outdated, update)
 Use this for <input> element, pass this into "oninput" event (this will replace all * characters only with numbers from 1 to 5):

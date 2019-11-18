@@ -1,5 +1,4 @@
-"use strict";
-class Input {
+export default class Input {
     constructor() {
         this.mask = '';
         this.symbol = '';
@@ -117,13 +116,13 @@ function regexLiteral(str) {
         input.oninput = () => onInput(input, inputObj);
     }
 })();
-function onInput(input, inputObj) {
+export function onInput(input, inputObj) {
     // Assign params every time in case it changes on the fly
     inputObj.mask = input.getAttribute('mask') || '';
     inputObj.symbol = input.getAttribute('symbol') || '*';
     inputObj.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
     inputObj.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-    inputObj.showMask = input.getAttribute('showMask') === "true" ? Infinity : Number(input.getAttribute('showMask'));
+    inputObj.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
     inputObj.value = input.value;
     inputObj.cursorPos = input.selectionStart;
     // Call parser

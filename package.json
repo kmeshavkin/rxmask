@@ -1,14 +1,15 @@
 {
   "name": "rxmask",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple to install and use, but advanced mask package",
   "main": "rxmask.js",
   "scripts": {
-    "test": "mocha"
+    "test": "cypress open"
   },
-  "author": "",
+  "author": "Konstantin Meshavkin",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
@@ -17,14 +18,16 @@
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "@types/mocha": "^5.2.7",
+    "cypress": "^3.6.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kostyan1996/rxmask.git"
+    "url": "git+https://github.com/kmeshavkin/rxmask.git"
   },
   "bugs": {
-    "url": "https://github.com/Kostyan1996/rxmask/issues"
+    "url": "https://github.com/kmeshavkin/rxmask/issues"
   },
-  "homepage": "https://github.com/Kostyan1996/rxmask#readme"
+  "homepage": "https://github.com/kmeshavkin/rxmask#readme"
 }

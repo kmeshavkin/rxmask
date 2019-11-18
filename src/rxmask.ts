@@ -1,4 +1,4 @@
-class Input {
+export default class Input {
   mask: string;
   symbol: string;
   rxmask: string[];
@@ -140,13 +140,13 @@ function regexLiteral(str: string) {
   }
 })();
 
-function onInput(input: HTMLTextAreaElement, inputObj: Input) {
+export function onInput(input: HTMLTextAreaElement, inputObj: Input) {
   // Assign params every time in case it changes on the fly
   inputObj.mask = input.getAttribute('mask') || '';
   inputObj.symbol = input.getAttribute('symbol') || '*';
   inputObj.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
   inputObj.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-  inputObj.showMask = input.getAttribute('showMask') === "true" ? Infinity : Number(input.getAttribute('showMask'));
+  inputObj.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
   inputObj.value = input.value;
   inputObj.cursorPos = input.selectionStart;
   // Call parser
