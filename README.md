@@ -21,7 +21,9 @@ Use this for `<input>` element, pass this into "oninput" event (this will replac
 ## Bugs
 * Place cursor before - in `***-**-**`, press delete - nothing happens
 * If maskSymbol includes "symbol" property itself, cursor will move
+* You can't paste mask symbol just before mask symbol (tests are commented out) 
 * "Stop user from adding symbols after mask is completed" is bugged for CTRL+V (if pasting adds to much symbols, it will not be added)
+* Selection + pasting works incorrectly for cursorPos due to _diff value
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
 
 ## Testing

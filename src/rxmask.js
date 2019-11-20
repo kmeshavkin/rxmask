@@ -81,8 +81,9 @@ export default class Input {
                 else {
                     output += this.rxmask[i];
                     // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
-                    if (i < this.cursorPos && i >= prevCursorPos - this._diff)
+                    if (i < this.cursorPos && i >= prevCursorPos - this._diff) {
                         this.cursorPos++;
+                    }
                 }
             }
             else if (this.showMask > i) {
