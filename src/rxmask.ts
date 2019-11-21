@@ -92,8 +92,6 @@ export default class Input {
 
   getOutput(parsedValue: string, prevCursorPos: number) {
     let output = '';
-    let movedCursorPos = false;
-
     for (let i = 0; i < this.rxmask.length; i++) {
       if (parsedValue.length > 0) {
         if (this.rxmask[i].match(/\[.*\]/)) {
@@ -102,18 +100,28 @@ export default class Input {
         } else {
           output += this.rxmask[i];
           // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
-          if (i < this.cursorPos && i >= prevCursorPos - this._diff) {
-            this.cursorPos++;
-          }
+          if (i < this.cursorPos && i >= prevCursorPos - this._diff) this.cursorPos++;
         }
       } else if (this.showMask > i) {
+        // Add mask until its length is this.showMask
         output += this.rxmask[i].match(/\[.*\]/) ? this.symbol : this.rxmask[i];
         // If showMask is greater than parsed value length, cursor should be moved to the position just next to last symbol from parsedValue
-        if (!movedCursorPos && this.cursorPos > i && this._diff > 0) {
-          this.cursorPos = i;
-          movedCursorPos = true;
-        }
+        if (this.cursorPos >= i) this.cursorPos = i;
       }
+    }
+
+    // ! This block incorrectly handles partial this.showMask atm
+    // ! Refactor it, condition is unreadable
+    // This while block causes mask symbols to be added after last character only if user added something
+    // Example is if with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -
+    while (
+      this._diff >= 0 &&
+      !output.includes(this.symbol) &&
+      this.rxmask[output.length] &&
+      !this.rxmask[output.length].match(/\[.*\]/)
+    ) {
+      output += this.rxmask[output.length];
+      if (this.cursorPos === output.length - 1) this.cursorPos++;
     }
 
     // Stop user from adding symbols after mask is completed

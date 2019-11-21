@@ -71,7 +71,6 @@ export default class Input {
     }
     getOutput(parsedValue, prevCursorPos) {
         let output = '';
-        let movedCursorPos = false;
         for (let i = 0; i < this.rxmask.length; i++) {
             if (parsedValue.length > 0) {
                 if (this.rxmask[i].match(/\[.*\]/)) {
@@ -81,19 +80,29 @@ export default class Input {
                 else {
                     output += this.rxmask[i];
                     // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
-                    if (i < this.cursorPos && i >= prevCursorPos - this._diff) {
+                    if (i < this.cursorPos && i >= prevCursorPos - this._diff)
                         this.cursorPos++;
-                    }
                 }
             }
             else if (this.showMask > i) {
+                // Add mask until its length is this.showMask
                 output += this.rxmask[i].match(/\[.*\]/) ? this.symbol : this.rxmask[i];
                 // If showMask is greater than parsed value length, cursor should be moved to the position just next to last symbol from parsedValue
-                if (!movedCursorPos && this.cursorPos > i && this._diff > 0) {
+                if (this.cursorPos >= i)
                     this.cursorPos = i;
-                    movedCursorPos = true;
-                }
             }
+        }
+        // ! This block incorrectly handles partial this.showMask atm
+        // ! Refactor it, condition is unreadable
+        // This while block causes mask symbols to be added after last character only if user added something
+        // Example is if with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -
+        while (this._diff >= 0 &&
+            !output.includes(this.symbol) &&
+            this.rxmask[output.length] &&
+            !this.rxmask[output.length].match(/\[.*\]/)) {
+            output += this.rxmask[output.length];
+            if (this.cursorPos === output.length - 1)
+                this.cursorPos++;
         }
         // Stop user from adding symbols after mask is completed
         if (parsedValue.length > 0) {
@@ -110,25 +119,26 @@ function regexLiteral(str) {
     const DOMInputs = document.getElementsByClassName('rxmask');
     for (let i = 0; i < DOMInputs.length; i++) {
         const input = DOMInputs[i];
-        const inputObj = new Input();
+        const inputInstance = new Input();
         // Call it first time to parse all params and apply visible part of mask
-        onInput(input, inputObj);
+        onInput(input, inputInstance);
         // Add event
-        input.oninput = () => onInput(input, inputObj);
+        input.oninput = () => onInput(input, inputInstance);
     }
 })();
-export function onInput(input, inputObj) {
+export function onInput(input, inputInstance) {
     // Assign params every time in case it changes on the fly
-    inputObj.mask = input.getAttribute('mask') || '';
-    inputObj.symbol = input.getAttribute('symbol') || '*';
-    inputObj.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
-    inputObj.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-    inputObj.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
-    inputObj.value = input.value;
-    inputObj.cursorPos = input.selectionStart;
+    inputInstance.mask = input.getAttribute('mask') || '';
+    inputInstance.symbol = input.getAttribute('symbol') || '*';
+    inputInstance.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
+    inputInstance.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
+    inputInstance.showMask =
+        input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
+    inputInstance.value = input.value;
+    inputInstance.cursorPos = input.selectionStart;
     // Call parser
-    inputObj.parseMask();
+    inputInstance.parseMask();
     // Everything is parsed, set output and cursorPos
-    input.value = inputObj.output;
-    input.setSelectionRange(inputObj.cursorPos, inputObj.cursorPos);
+    input.value = inputInstance.output;
+    input.setSelectionRange(inputInstance.cursorPos, inputInstance.cursorPos);
 }

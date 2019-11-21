@@ -7,6 +7,9 @@ Simple to install and use, but advanced mask package. Some features:
 * Allows to specify format for every symbol
 * Robust (test coverage using Cypress)
 
+## Example
+Playground will be provided later. For now you can see `example/example.html` in the project.
+
 ## How to install
 `npm install rxmask` or download `rxmask.js` file (rxmask.min.js with polyfills will be provided later).
 
@@ -40,7 +43,7 @@ These options can be provided both to `Input` class itself and as `<input>` tag 
 * `rxmask` - regex mask (if `rxmask` is present, `mask` will be ignored), symbols in square brackets will be parsed as symbols for user input, any other symbol will be parsed as mask symbol.
 * `symbol` - mask symbol, specifies character that will be replaced in mask with user input.
 * `allowedSymbols` - characters allowed to be used in this input. If this option is present, all other characters will be ignored when user types them.
-* `showMask` - show whole mask, part of it or not show it at all (can be `true`, `false` or any `number`).
+* `showMask` - show whole mask, part of it or not show it at all (can be any `number`, but you can also provide `true` if you use `onInput` function or script tag).
 
 Rest are class only options:
 * `value` - assign to it value you want to parse
@@ -75,18 +78,17 @@ function onInput(input: HTMLTextAreaElement, inputInstance: Input) {
 
 ## TODO
 * Better example (more examples where adding symbol that already in mask is useful + better styling + convey that any symbol can be used, including some that in mask + allow to play with mask and change params on the fly)
-* Better structure class (at least add options object upon initialization)
-* Allow to both install as module or use it in plain HTML
 * Minify rxmask.js and add polyfills (then remove from README)
 * Provide typescript support for imports (then remove from README)
 * Provide options for class constructor (then remove from README)
 
 ## Bugs
-* Place cursor before - in `***-**-**`, press delete - nothing happens
-* If maskSymbol includes "symbol" property itself, cursor will move
-* You can't paste mask symbol just before mask symbol (tests are commented out) 
+* !You can't paste mask symbol just before mask symbol (tests are commented out) 
+* !Deleting mask symbols with showMask on will not move cursor correctly (to the previous this.symbol, see all " // should be" in example.spec.js)
 * "Stop user from adding symbols after mask is completed" is bugged for CTRL+V (if pasting adds to much symbols, it will not be added)
 * Selection + pasting works incorrectly for cursorPos due to _diff value
+* If maskSymbol includes "symbol" property itself, cursor will move (should not)
+* Place cursor before - in `***-**-**`, press delete - nothing happens
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
 
 ## Testing
