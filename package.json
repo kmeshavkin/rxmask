@@ -1,6 +1,6 @@
 {
   "name": "rxmask",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Simple to install and use, but advanced mask package",
   "main": "rxmask.js",
   "scripts": {

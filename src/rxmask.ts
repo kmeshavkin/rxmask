@@ -134,26 +134,27 @@ function regexLiteral(str: string) {
   const DOMInputs = <HTMLCollectionOf<HTMLTextAreaElement>>document.getElementsByClassName('rxmask');
   for (let i = 0; i < DOMInputs.length; i++) {
     const input = DOMInputs[i];
-    const inputObj = new Input();
+    const inputInstance = new Input();
     // Call it first time to parse all params and apply visible part of mask
-    onInput(input, inputObj);
+    onInput(input, inputInstance);
     // Add event
-    input.oninput = () => onInput(input, inputObj);
+    input.oninput = () => onInput(input, inputInstance);
   }
 })();
 
-export function onInput(input: HTMLTextAreaElement, inputObj: Input) {
+export function onInput(input: HTMLTextAreaElement, inputInstance: Input) {
   // Assign params every time in case it changes on the fly
-  inputObj.mask = input.getAttribute('mask') || '';
-  inputObj.symbol = input.getAttribute('symbol') || '*';
-  inputObj.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
-  inputObj.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-  inputObj.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
-  inputObj.value = input.value;
-  inputObj.cursorPos = input.selectionStart;
+  inputInstance.mask = input.getAttribute('mask') || '';
+  inputInstance.symbol = input.getAttribute('symbol') || '*';
+  inputInstance.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
+  inputInstance.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
+  inputInstance.showMask =
+    input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
+  inputInstance.value = input.value;
+  inputInstance.cursorPos = input.selectionStart;
   // Call parser
-  inputObj.parseMask();
+  inputInstance.parseMask();
   // Everything is parsed, set output and cursorPos
-  input.value = inputObj.output;
-  input.setSelectionRange(inputObj.cursorPos, inputObj.cursorPos);
+  input.value = inputInstance.output;
+  input.setSelectionRange(inputInstance.cursorPos, inputInstance.cursorPos);
 }
