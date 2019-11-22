@@ -1,4 +1,4 @@
-export default class Input {
+export default class Parser {
   mask: string;
   symbol: string;
   rxmask: string[];
@@ -142,27 +142,27 @@ function regexLiteral(str: string) {
   const DOMInputs = <HTMLCollectionOf<HTMLTextAreaElement>>document.getElementsByClassName('rxmask');
   for (let i = 0; i < DOMInputs.length; i++) {
     const input = DOMInputs[i];
-    const inputInstance = new Input();
+    const parser = new Parser();
     // Call it first time to parse all params and apply visible part of mask
-    onInput(input, inputInstance);
+    onInput(input, parser);
     // Add event
-    input.oninput = () => onInput(input, inputInstance);
+    input.oninput = () => onInput(input, parser);
   }
 })();
 
-export function onInput(input: HTMLTextAreaElement, inputInstance: Input) {
+export function onInput(input: HTMLTextAreaElement, parser: Parser) {
   // Assign params every time in case it changes on the fly
-  inputInstance.mask = input.getAttribute('mask') || '';
-  inputInstance.symbol = input.getAttribute('symbol') || '*';
-  inputInstance.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
-  inputInstance.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-  inputInstance.showMask =
+  parser.mask = input.getAttribute('mask') || '';
+  parser.symbol = input.getAttribute('symbol') || '*';
+  parser.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
+  parser.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
+  parser.showMask =
     input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
-  inputInstance.value = input.value;
-  inputInstance.cursorPos = input.selectionStart;
+  parser.value = input.value;
+  parser.cursorPos = input.selectionStart;
   // Call parser
-  inputInstance.parseMask();
+  parser.parseMask();
   // Everything is parsed, set output and cursorPos
-  input.value = inputInstance.output;
-  input.setSelectionRange(inputInstance.cursorPos, inputInstance.cursorPos);
+  input.value = parser.output;
+  input.setSelectionRange(parser.cursorPos, parser.cursorPos);
 }
