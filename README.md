@@ -6,6 +6,7 @@ Simple to install and use, but advanced mask package. Some features:
 * Allows to use same symbols that are present in mask
 * Allows to specify format for every symbol
 * Robust (test coverage using Cypress)
+* No dependencies
 
 ## Example
 Playground will be provided later. For now you can see `example/example.html` in the project.

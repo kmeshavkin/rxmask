@@ -1,7 +1,7 @@
 {
   "name": "rxmask",
-  "version": "1.0.7",
-  "description": "Simple to install and use, but advanced mask package",
+  "version": "1.0.8",
+  "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
   "main": "rxmask.js",
   "scripts": {
     "test": "cypress open"
