@@ -1,6 +1,6 @@
 {
   "name": "rxmask",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simple to install and use, but advanced mask package",
   "main": "rxmask.js",
   "scripts": {
@@ -17,7 +17,10 @@
     "symbol mask",
     "regex",
     "RegExp",
-    "regular expressions"
+    "regular expressions",
+    "pattern",
+    "input",
+    "parser"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.6.1",
