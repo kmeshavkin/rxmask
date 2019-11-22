@@ -1,13 +1,13 @@
 {
   "name": "rxmask",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Simple to install and use, but advanced mask package",
   "main": "rxmask.js",
   "scripts": {
     "test": "cypress open"
   },
   "author": "Konstantin Meshavkin",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
   },
   "keywords": [
