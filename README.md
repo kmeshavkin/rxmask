@@ -21,7 +21,7 @@ Simple to install and use, but advanced mask package.
 Playground will be provided later. For now you can see `example/example.html` in the project.
 
 ## <a name="Installation"></a>Installation
-`npm install rxmask` or download `rxmask.js` file (rxmask.min.js with polyfills will be provided later).
+`npm i rxmask` or download `rxmask.js` file (rxmask.min.js with polyfills will be provided later).
 
 Then you have three options.
 
@@ -95,4 +95,4 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
 ## <a name="Testing"></a>Testing
 I use Live Server extension for VSCode for easier testing.
 * Launch Live Server for example/example.html (default address is `http://127.0.0.1:5500/example/example.html`)
-* `yarn test` to launch Cypress
+* `npm test` to launch Cypress

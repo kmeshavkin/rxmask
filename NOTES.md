@@ -6,7 +6,9 @@
 * Provide typescript support for imports (then remove from README)
 * Provide options for class constructor (also maybe add option to disable trailing mask symbols (when `123` results in `123-` if mask is `***-**-**`)) (then remove from README)
 ### Tests
-* Add more tests for other inputs similar to simple input + tests for cursorPos for showMask tests (both part and full)
+* Add more tests for other inputs similar to simple input
+* Add more tests for cursorPos for showMask tests (both part and full)
+* Add tests for Parser class and onInput() function
 * test CTRL+backspace
 * deletion in the middle for regex input
 

@@ -8,7 +8,7 @@ before(() => {
   cy.visit('http://127.0.0.1:5500/example/example.html');
 });
 
-describe('simple input', () => {
+describe('Simple input with values restricted to numbers', () => {
   afterEach(() => {
     cy.get('input.simple').clear();
   });
@@ -163,7 +163,7 @@ describe('simple input', () => {
   });
 });
 
-describe('showMask input', () => {
+describe('Input with showMask', () => {
   afterEach(() => {
     cy.get('input.showMask').clear();
   });
@@ -219,9 +219,64 @@ describe('showMask input', () => {
       .should('have.value', '+_ (___) ___-__-__')
       .and('have.prop', 'selectionStart', 1);
   });
+
+  it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
+    cy.get('input.showMask')
+      .should('have.value', '+_ (___) ___-__-__')
+      .type('123')
+      .should('have.value', '+1 (23_) ___-__-__')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{leftarrow}{leftarrow}4')
+      .should('have.value', '+1 (423) ___-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('56')
+      .should('have.value', '+1 (456) 23_-__-__')
+      .and('have.prop', 'selectionStart', 9)
+      .type('78')
+      .should('have.value', '+1 (456) 782-3_-__')
+      .and('have.prop', 'selectionStart', 11)
+      .type('9')
+      .should('have.value', '+1 (456) 789-23-__')
+      .and('have.prop', 'selectionStart', 13)
+      .type('01')
+      .should('have.value', '+1 (456) 789-01-23')
+      .and('have.prop', 'selectionStart', 16);
+  });
+
+  // it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
+  //   cy.get('input.showMask')
+  //     .should('have.value', '+_ (___) ___-__-__')
+  //     .type('12345678901')
+  //     .should('have.value', '+1 (234) 567-89-01')
+  //     .and('have.prop', 'selectionStart', 18)
+  //     .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}{backspace}')
+  //     .should('have.value', '+1 (234) 567-89-01')
+  //     .and('have.prop', 'selectionStart', 17)
+  //     .type('{backspace}')
+  //     .should('have.value', '+1 (234) 567-89-__')
+  //     .and('have.prop', 'selectionStart', 15)
+  //     .type('{backspace}{backspace}{backspace}{backspace}')
+  //     .should('have.value', '+1 (234) 5__-__-__')
+  //     .and('have.prop', 'selectionStart', 10)
+  //     .type('{backspace}')
+  //     .should('have.value', '+1 (234) ___-__-__')
+  //     .and('have.prop', 'selectionStart', 7)
+  //     .type('{backspace}{backspace}')
+  //     .should('have.value', '+1 (2__) ___-__-__')
+  //     .and('have.prop', 'selectionStart', 5)
+  //     .type('{backspace}')
+  //     .should('have.value', '+1 (___) ___-__-__')
+  //     .and('have.prop', 'selectionStart', 2)
+  //     .type('{backspace}')
+  //     .should('have.value', '+_ (___) ___-__-__')
+  //     .and('have.prop', 'selectionStart', 1)
+  //     .type('{backspace}')
+  //     .should('have.value', '+_ (___) ___-__-__')
+  //     .and('have.prop', 'selectionStart', 1);
+  // });
 });
 
-describe('showMaskSymbols input', () => {
+describe('Input with showMask and allowed mask symbols', () => {
   afterEach(() => {
     cy.get('input.showMaskSymbols').clear();
   });
@@ -273,7 +328,7 @@ describe('showMaskSymbols input', () => {
   });
 });
 
-describe('showMaskPart input', () => {
+describe('Input with partial showMask and allowed mask symbols', () => {
   afterEach(() => {
     cy.get('input.showMaskPart').clear();
   });
@@ -334,7 +389,7 @@ describe('showMaskPart input', () => {
   });
 });
 
-describe('regex input', () => {
+describe('Input with showMask and regex mask', () => {
   afterEach(() => {
     cy.get('input.regex').clear();
   });
