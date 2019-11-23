@@ -1,9 +1,9 @@
-export default class Input {
+export default class Parser {
     constructor() {
         this.mask = '';
-        this.symbol = '';
+        this.placeholderSymbol = '';
         this.rxmask = [];
-        this.allowedSymbols = '.';
+        this.allowedCharacters = '.';
         this.showMask = 0;
         this.value = '';
         this.cursorPos = 0;
@@ -18,7 +18,7 @@ export default class Input {
     parseMask() {
         if (this.rxmask.length === 0) {
             this.rxmask = this.mask.split('').map(char => {
-                if (char === this.symbol)
+                if (char === this.placeholderSymbol)
                     return '[^]';
                 return char;
             });
@@ -39,7 +39,7 @@ export default class Input {
         // Get value before cursor without mask symbols
         let beforeCursor = '';
         for (let i = 0; i < this.value.length; i++) {
-            if (this.value[i] !== this.rxmask[i] && this.value[i] !== this.symbol && i < this.cursorPos) {
+            if (this.value[i] !== this.rxmask[i] && this.value[i] !== this.placeholderSymbol && i < this.cursorPos) {
                 beforeCursor += this.value[i];
             }
         }
@@ -48,7 +48,7 @@ export default class Input {
         for (let i = 0; i < this.value.length - this.cursorPos; i++) {
             // Diff used here to "shift" mask to position where it supposed to be
             if (this.value[i + this.cursorPos] !== this.rxmask[i + this.cursorPos - diff] &&
-                this.value[i + this.cursorPos] !== this.symbol) {
+                this.value[i + this.cursorPos] !== this.placeholderSymbol) {
                 afterCursor += this.value[i + this.cursorPos];
             }
         }
@@ -58,7 +58,7 @@ export default class Input {
         let parsedValue = '';
         const rxmask = this.rxmask.filter(pattern => pattern.match(/\[.*\]/));
         for (let i = 0; i < noMaskValue.length; i++) {
-            if (noMaskValue[i].match(this.allowedSymbols) && noMaskValue[i].match(new RegExp(rxmask[i]))) {
+            if (noMaskValue[i].match(this.allowedCharacters) && noMaskValue[i].match(new RegExp(rxmask[i]))) {
                 parsedValue += noMaskValue[i];
             }
             else {
@@ -70,12 +70,17 @@ export default class Input {
         return parsedValue;
     }
     getOutput(parsedValue, prevCursorPos) {
+        // ! It works, but still unreadable, especially second part. Probably need to separate in two cycles and redo whole second part
         let output = '';
+        let hasPlaceholder = false;
+        let lastPlaceholderPos = -1;
         for (let i = 0; i < this.rxmask.length; i++) {
+            const placeholder = this.rxmask[i].match(/\[.*\]/);
             if (parsedValue.length > 0) {
-                if (this.rxmask[i].match(/\[.*\]/)) {
+                if (placeholder) {
                     output += parsedValue[0];
                     parsedValue = parsedValue.slice(1);
+                    lastPlaceholderPos = i;
                 }
                 else {
                     output += this.rxmask[i];
@@ -84,26 +89,35 @@ export default class Input {
                         this.cursorPos++;
                 }
             }
-            else if (this.showMask > i) {
-                // Add mask until its length is this.showMask
-                output += this.rxmask[i].match(/\[.*\]/) ? this.symbol : this.rxmask[i];
-                // If showMask is greater than parsed value length, cursor should be moved to the position just next to last symbol from parsedValue
-                if (this.cursorPos >= i)
-                    this.cursorPos = i;
+            else {
+                if (this.showMask > i) {
+                    if (placeholder) {
+                        output += this.placeholderSymbol;
+                        hasPlaceholder = true;
+                    }
+                    else {
+                        output += this.rxmask[i];
+                    }
+                    if (this.cursorPos > i)
+                        this.cursorPos = i;
+                    if ((this._diff >= 0 || lastPlaceholderPos === -1) && !hasPlaceholder)
+                        this.cursorPos++;
+                }
+                else if (!placeholder && this._diff >= 0 && !hasPlaceholder) {
+                    output += this.rxmask[i];
+                    if (this.cursorPos > lastPlaceholderPos)
+                        this.cursorPos++;
+                }
+                else {
+                    break;
+                }
             }
         }
-        // ! This block incorrectly handles partial this.showMask atm
-        // ! Refactor it, condition is unreadable
+        // ! Old comments, place them where they needed
+        // Add mask until its length is this.showMask
+        // If showMask is greater than parsed value length, cursor should be moved to the position just next to last symbol from parsedValue
         // This while block causes mask symbols to be added after last character only if user added something
         // Example is if with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -
-        while (this._diff >= 0 &&
-            !output.includes(this.symbol) &&
-            this.rxmask[output.length] &&
-            !this.rxmask[output.length].match(/\[.*\]/)) {
-            output += this.rxmask[output.length];
-            if (this.cursorPos === output.length - 1)
-                this.cursorPos++;
-        }
         // Stop user from adding symbols after mask is completed
         if (parsedValue.length > 0) {
             this.cursorPos = prevCursorPos - this._diff;
@@ -112,33 +126,33 @@ export default class Input {
         return output;
     }
 }
-function regexLiteral(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+// Currently unused, parses string and escapes any character that is special to RegExp
+// function regexLiteral(str: string) {
+//   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// }
 (function processInputs() {
     const DOMInputs = document.getElementsByClassName('rxmask');
     for (let i = 0; i < DOMInputs.length; i++) {
         const input = DOMInputs[i];
-        const inputInstance = new Input();
+        const parser = new Parser();
         // Call it first time to parse all params and apply visible part of mask
-        onInput(input, inputInstance);
+        onInput(input, parser);
         // Add event
-        input.oninput = () => onInput(input, inputInstance);
+        input.oninput = () => onInput(input, parser);
     }
 })();
-export function onInput(input, inputInstance) {
+export function onInput(input, parser) {
     // Assign params every time in case it changes on the fly
-    inputInstance.mask = input.getAttribute('mask') || '';
-    inputInstance.symbol = input.getAttribute('symbol') || '*';
-    inputInstance.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
-    inputInstance.allowedSymbols = input.getAttribute('allowedSymbols') || '.';
-    inputInstance.showMask =
-        input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
-    inputInstance.value = input.value;
-    inputInstance.cursorPos = input.selectionStart;
+    parser.mask = input.getAttribute('mask') || '';
+    parser.placeholderSymbol = input.getAttribute('placeholderSymbol') || '*';
+    parser.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
+    parser.allowedCharacters = input.getAttribute('allowedCharacters') || '.';
+    parser.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
+    parser.value = input.value;
+    parser.cursorPos = input.selectionStart;
     // Call parser
-    inputInstance.parseMask();
+    parser.parseMask();
     // Everything is parsed, set output and cursorPos
-    input.value = inputInstance.output;
-    input.setSelectionRange(inputInstance.cursorPos, inputInstance.cursorPos);
+    input.value = parser.output;
+    input.setSelectionRange(parser.cursorPos, parser.cursorPos);
 }
