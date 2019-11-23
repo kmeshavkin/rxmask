@@ -1,6 +1,7 @@
 # rxmask.js
-## Description
-Simple to install and use, but advanced mask package. Some features:
+Simple to install and use, but advanced mask package.
+
+## <a name="Features"></a>Features
 * Both module and simple HTML script
 * Flexible - allows to change mask, placeholder symbol format, show or hide unfilled mask (or even part of it) and more
 * Allows to use same characters that are present in mask
@@ -8,10 +9,18 @@ Simple to install and use, but advanced mask package. Some features:
 * Robust (test coverage using Cypress)
 * No dependencies
 
-## Example
+## Table of contents
+* [Features](#Features)
+* [Example](#Example)
+* [Installation](#Installation)
+  * [Options](#Installation/Options)
+* [Notes](#Notes)
+* [Testing](#Testing)
+
+## <a name="Example"></a>Example
 Playground will be provided later. For now you can see `example/example.html` in the project.
 
-## How to install
+## <a name="Installation"></a>Installation
 `npm install rxmask` or download `rxmask.js` file (rxmask.min.js with polyfills will be provided later).
 
 Then you have three options.
@@ -26,7 +35,7 @@ It will work for simple plain html files
   <input class="rxmask" mask="***-**-**" placeholderSymbol="*" allowedCharacters="[0-9]"/>
 </body>
 ```
-You should include `class="rxmask"` in your input - it's the only way for script to automatically parse DOM tree for inputs to be applied mask to. Also you can add any of the [Options](#params) **in the first section** to the input as properties. See `example.html` for more some examples.
+You should include `class="rxmask"` in your input - it's the only way for script to automatically parse DOM tree for inputs to be applied mask to. Also you can add any of the [Options](#Installation/Options) **in the first section** to the input as properties. See `example.html` for more some examples.
 
 ### Import `Parser` class and `onInput` function from imported `rxmask.js` file
 Create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
@@ -40,7 +49,7 @@ Note that under the hood class stores previous value, so if you want to just par
 
 Options for class constructor will be provided later.
 
-### <a name="params"></a>Options
+### <a name="Installation/Options"></a>Options
 These options can be provided both to `Parser` class itself and as `<input>` tag properties:
 * `mask` - mask, should include `placeholderSymbol`, otherwise user will not be able to type any characters.
 * `rxmask` - regex mask (if `rxmask` is present, `mask` will be ignored), characters in square brackets will be parsed as characters for user input, any other character will be parsed as mask symbol.
@@ -50,10 +59,10 @@ These options can be provided both to `Parser` class itself and as `<input>` tag
 
 Rest are class only options:
 * `value` - assign to it value you want to parse
-* `cursorPos` - you can assign to it cursor position value (in case of `<input>` it's `selectionStart` property) which will be modified after mask parsing, then you can use `cursorPos` class property as cursor position for your desired input (in case of `<input>` it's `<HTMLTextAreaElement>.setSelectionRange(parser.cursorPos, parser.cursorPos)`). See [example](#classExample) below.
+* `cursorPos` - you can assign to it cursor position value (in case of `<input>` it's `selectionStart` property) which will be modified after mask parsing, then you can use `cursorPos` class property as cursor position for your desired input (in case of `<input>` it's `<HTMLTextAreaElement>.setSelectionRange(parser.cursorPos, parser.cursorPos)`). See [example](#Installation/Options/Example) below.
 * `parseMask()` method - you should call this method when you assigned all required parameters to `Parser` class instance. It will parse the mask and update `output` and `cursorPos` values.
 * `output` - parsed `value`. Grab it after you called `parseMask()`. This value is the correct field to use as parsed mask value.
-#### <a name="classExample"></a>Example
+#### <a name="Installation/Options/Example"></a>Example
 Here's example from `rxmask.ts` of how you can set up your own parser.
 
 In this example <HTMLTextAreaElement> input used for parameters parsing, but you can use any other input (with according methods) or just provide `mask` and other parameters yourself.
@@ -79,11 +88,11 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
 }
 ```
 
-## Some notes
+## <a name="Notes"></a>Notes
 * ! Regex mask is somewhat broken when trying to add characters before some typed characters (not yet covered by tests)
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
 
-## Testing
+## <a name="Testing"></a>Testing
 I use Live Server extension for VSCode for easier testing.
 * Launch Live Server for example/example.html (default address is `http://127.0.0.1:5500/example/example.html`)
 * `yarn test` to launch Cypress
