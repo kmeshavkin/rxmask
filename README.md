@@ -89,7 +89,6 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
 ```
 
 ## <a name="Notes"></a>Notes
-* ! Regex mask is somewhat broken when trying to add characters before some typed characters (not yet covered by tests)
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
 
 ## <a name="Testing"></a>Testing

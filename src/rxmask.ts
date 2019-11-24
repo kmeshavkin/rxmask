@@ -77,16 +77,21 @@ export default class Parser {
     return beforeCursor + afterCursor;
   }
 
-  parseAllowedValue(noMaskValue: string) {
+  parseAllowedValue([...noMaskValue]: string) {
     let parsedValue = '';
     const rxmask = this.rxmask.filter(pattern => pattern.match(/\[.*\]/));
-    for (let i = 0; i < noMaskValue.length; i++) {
+    let i = 0;
+    while (noMaskValue.length > 0 && i < noMaskValue.length) {
       if (noMaskValue[i].match(this.allowedCharacters) && noMaskValue[i].match(new RegExp(rxmask[i]))) {
         parsedValue += noMaskValue[i];
+        i++;
+      } else if (noMaskValue[i].match(this.allowedCharacters)) {
+        noMaskValue.shift();
+        if (this._actualCursorPos > i) this._actualCursorPos--;
       } else {
+        noMaskValue.shift();
         // This line returns cursor to appropriate position according to removed elements
         this._actualCursorPos--;
-        this._diff--;
       }
     }
 

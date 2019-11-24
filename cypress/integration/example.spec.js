@@ -522,4 +522,50 @@ describe('Input with showMask and regex mask', () => {
       .should('have.value', '** ***-**')
       .and('have.prop', 'selectionStart', 0);
   });
+
+  it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
+    cy.get('input.regex')
+      .should('have.value', '** ***-**')
+      .type('1A')
+      .should('have.value', 'A* ***-**')
+      .and('have.prop', 'selectionStart', 1)
+      .type('bB54')
+      .should('have.value', 'AB 4**-**')
+      .and('have.prop', 'selectionStart', 4)
+      .type('{leftarrow}{leftarrow}5a61')
+      .should('have.value', 'AB 14*-**')
+      .and('have.prop', 'selectionStart', 4)
+      .type('2Aa3')
+      .should('have.value', 'AB 123-**')
+      .and('have.prop', 'selectionStart', 7)
+      .type('a1')
+      .should('have.value', 'AB 123-a1')
+      .and('have.prop', 'selectionStart', 9);
+  });
+
+  it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
+    cy.get('input.regex')
+      .should('have.value', '** ***-**')
+      .type('AB456a1')
+      .should('have.value', 'AB 456-a1')
+      .and('have.prop', 'selectionStart', 9)
+      .type('{backspace}')
+      .should('have.value', 'AB 456-a*')
+      .and('have.prop', 'selectionStart', 8)
+      .type('{backspace}')
+      .should('have.value', 'AB 456-**')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{leftarrow}{leftarrow}{del}')
+      .should('have.value', 'AB 46*-**')
+      .and('have.prop', 'selectionStart', 4)
+      .type('{leftarrow}{leftarrow}{leftarrow}{del}')
+      .should('have.value', 'A* ***-**')
+      .and('have.prop', 'selectionStart', 1)
+      .type('{backspace}')
+      .should('have.value', '** ***-**')
+      .and('have.prop', 'selectionStart', 0)
+      .type('{backspace}')
+      .should('have.value', '** ***-**')
+      .and('have.prop', 'selectionStart', 0);
+  });
 });
