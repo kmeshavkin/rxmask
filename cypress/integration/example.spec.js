@@ -240,37 +240,31 @@ describe('Input with showMask', () => {
       .and('have.prop', 'selectionStart', 16);
   });
 
-  // it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
-  //   cy.get('input.showMask')
-  //     .should('have.value', '+_ (___) ___-__-__')
-  //     .type('12345678901')
-  //     .should('have.value', '+1 (234) 567-89-01')
-  //     .and('have.prop', 'selectionStart', 18)
-  //     .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}{backspace}')
-  //     .should('have.value', '+1 (234) 567-89-01')
-  //     .and('have.prop', 'selectionStart', 17)
-  //     .type('{backspace}')
-  //     .should('have.value', '+1 (234) 567-89-__')
-  //     .and('have.prop', 'selectionStart', 15)
-  //     .type('{backspace}{backspace}{backspace}{backspace}')
-  //     .should('have.value', '+1 (234) 5__-__-__')
-  //     .and('have.prop', 'selectionStart', 10)
-  //     .type('{backspace}')
-  //     .should('have.value', '+1 (234) ___-__-__')
-  //     .and('have.prop', 'selectionStart', 7)
-  //     .type('{backspace}{backspace}')
-  //     .should('have.value', '+1 (2__) ___-__-__')
-  //     .and('have.prop', 'selectionStart', 5)
-  //     .type('{backspace}')
-  //     .should('have.value', '+1 (___) ___-__-__')
-  //     .and('have.prop', 'selectionStart', 2)
-  //     .type('{backspace}')
-  //     .should('have.value', '+_ (___) ___-__-__')
-  //     .and('have.prop', 'selectionStart', 1)
-  //     .type('{backspace}')
-  //     .should('have.value', '+_ (___) ___-__-__')
-  //     .and('have.prop', 'selectionStart', 1);
-  // });
+  it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
+    cy.get('input.showMask')
+      .should('have.value', '+_ (___) ___-__-__')
+      .type('12345678901')
+      .should('have.value', '+1 (234) 567-89-01')
+      .and('have.prop', 'selectionStart', 18)
+      .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}{backspace}')
+      .should('have.value', '+1 (234) 567-90-1_')
+      .and('have.prop', 'selectionStart', 12)
+      .type('{backspace}')
+      .should('have.value', '+1 (234) 569-01-__')
+      .and('have.prop', 'selectionStart', 11)
+      .type('{backspace}{backspace}{backspace}{backspace}')
+      .should('have.value', '+1 (290) 1__-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{del}')
+      .should('have.value', '+1 (201) ___-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{del}{del}{del}')
+      .should('have.value', '+1 (2__) ___-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{backspace}{backspace}{backspace}')
+      .should('have.value', '+_ (___) ___-__-__')
+      .and('have.prop', 'selectionStart', 1);
+  });
 });
 
 describe('Input with showMask and allowed mask symbols', () => {
@@ -320,6 +314,55 @@ describe('Input with showMask and allowed mask symbols', () => {
       .should('have.value', '+_ (___) ___-__-__')
       .and('have.prop', 'selectionStart', 1)
       .type('{backspace}')
+      .should('have.value', '+_ (___) ___-__-__')
+      .and('have.prop', 'selectionStart', 1);
+  });
+
+  it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
+    cy.get('input.showMaskSymbols')
+      .should('have.value', '+_ (___) ___-__-__')
+      .type('+ (')
+      .should('have.value', '++ ( (_) ___-__-__')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{leftarrow}{leftarrow})')
+      .should('have.value', '++ () () ___-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type(')(')
+      .should('have.value', '++ ())()  (_-__-__')
+      .and('have.prop', 'selectionStart', 9)
+      .type('(-')
+      .should('have.value', '++ ())() (- -(_-__')
+      .and('have.prop', 'selectionStart', 11)
+      .type('-')
+      .should('have.value', '++ ())() (--- (-__')
+      .and('have.prop', 'selectionStart', 13)
+      .type(' -')
+      .should('have.value', '++ ())() (--- -- (')
+      .and('have.prop', 'selectionStart', 16);
+  });
+
+  it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
+    cy.get('input.showMaskSymbols')
+      .should('have.value', '+_ (___) ___-__-__')
+      .type('+ ())(--+ -')
+      .should('have.value', '++ ( ()) )(---+- -')
+      .and('have.prop', 'selectionStart', 18)
+      .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}{backspace}')
+      .should('have.value', '++ ( ()) )(--+ --_')
+      .and('have.prop', 'selectionStart', 12)
+      .type('{backspace}')
+      .should('have.value', '++ ( ()) )(+- --__')
+      .and('have.prop', 'selectionStart', 11)
+      .type('{backspace}{backspace}{backspace}{backspace}')
+      .should('have.value', '++ ( + ) -__-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{del}')
+      .should('have.value', '++ (  -) ___-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{del}{del}{del}')
+      .should('have.value', '++ ( __) ___-__-__')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{backspace}{backspace}{backspace}')
       .should('have.value', '+_ (___) ___-__-__')
       .and('have.prop', 'selectionStart', 1);
   });
@@ -381,6 +424,49 @@ describe('Input with partial showMask and allowed mask symbols', () => {
       .should('have.value', ' _ [___]')
       .and('have.prop', 'selectionStart', 1)
       .type('{backspace}')
+      .should('have.value', ' _ [___]')
+      .and('have.prop', 'selectionStart', 1);
+  });
+
+  it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
+    cy.get('input.showMaskPart')
+      .should('have.value', ' _ [___]')
+      .type('a12')
+      .should('have.value', ' a [12_]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{leftarrow}{leftarrow}3')
+      .should('have.value', ' a [312] [')
+      .and('have.prop', 'selectionStart', 5)
+      .type('$% ')
+      .should('have.value', ' a [3$%] [ 12] [')
+      .and('have.prop', 'selectionStart', 11)
+      .type('[]')
+      .should('have.value', ' a [3$%] [ []] [12]')
+      .and('have.prop', 'selectionStart', 16);
+  });
+
+  it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
+    cy.get('input.showMaskPart')
+      .should('have.value', ' _ [___]')
+      .type('a123$% []')
+      .should('have.value', ' a [123] [$% ] [[]]')
+      .and('have.prop', 'selectionStart', 19)
+      .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{backspace}')
+      .should('have.value', ' a [123] [% [] []')
+      .and('have.prop', 'selectionStart', 7)
+      .type('{backspace}')
+      .should('have.value', ' a [12%] [ []')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{del}{del}')
+      .should('have.value', ' a [12[] []')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{del}')
+      .should('have.value', ' a [12]]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{del}')
+      .should('have.value', ' a [12_]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{backspace}{backspace}{backspace}{backspace}')
       .should('have.value', ' _ [___]')
       .and('have.prop', 'selectionStart', 1);
   });
