@@ -71,7 +71,7 @@ describe('Simple input with values restricted to numbers', () => {
       .and('have.prop', 'selectionStart', 5)
       .type('7')
       .should('have.value', '345-67-12')
-      .and('have.prop', 'selectionStart', 6);
+      .and('have.prop', 'selectionStart', 7);
   });
 
   it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
@@ -79,9 +79,6 @@ describe('Simple input with values restricted to numbers', () => {
       .type('1234567{leftarrow}{leftarrow}{leftarrow}{leftarrow}')
       .should('have.value', '123-45-67')
       .and('have.prop', 'selectionStart', 5)
-      .type('{backspace}')
-      .should('have.value', '123-56-7')
-      .and('have.prop', 'selectionStart', 4)
       .type('{backspace}')
       .should('have.value', '123-56-7')
       .and('have.prop', 'selectionStart', 3)
@@ -131,7 +128,7 @@ describe('Simple input with values restricted to numbers', () => {
       .and('have.prop', 'selectionStart', 5)
       .type('{leftarrow}{leftarrow}{leftarrow}c5G')
       .should('have.value', '125-34-')
-      .and('have.prop', 'selectionStart', 3);
+      .and('have.prop', 'selectionStart', 4);
   });
 
   it('should correctly parse multiple pasted characters', () => {

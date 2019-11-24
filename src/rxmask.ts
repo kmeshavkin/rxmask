@@ -10,6 +10,7 @@ export default class Parser {
   private _output: string;
   private _prevValue: string;
   private _diff: number;
+  private _actualCursorPos: number;
 
   constructor() {
     this.mask = '';
@@ -23,6 +24,7 @@ export default class Parser {
     this._output = '';
     this._prevValue = '';
     this._diff = 0;
+    this._actualCursorPos = 0;
   }
 
   get output() {
@@ -71,6 +73,7 @@ export default class Parser {
       }
     }
 
+    this._actualCursorPos = beforeCursor.length; // it holds position of cursor after input was parsed
     return beforeCursor + afterCursor;
   }
 
@@ -82,7 +85,7 @@ export default class Parser {
         parsedValue += noMaskValue[i];
       } else {
         // This line returns cursor to appropriate position according to removed elements
-        this.cursorPos--;
+        this._actualCursorPos--;
         this._diff--;
       }
     }
@@ -90,47 +93,53 @@ export default class Parser {
     return parsedValue;
   }
 
-  getOutput(parsedValue: string, prevCursorPos: number) {
-    // ! It works, but still unreadable, especially second part. Probably need to separate in two cycles and redo whole second part
+  getOutput([...parsedValue]: string, prevCursorPos: number) {
+    this.cursorPos = 0; // We don't need initial cursorPos anymore
     let output = '';
-    let hasPlaceholder = false;
-    let lastPlaceholderPos = -1;
+    const parsedValueEmpty = parsedValue.length === 0;
+    let encounteredPlaceholder = false; // stores if loop found a placeholder at least once
     for (let i = 0; i < this.rxmask.length; i++) {
-      const placeholder = this.rxmask[i].match(/\[.*\]/);
-      if (parsedValue.length > 0) {
-        if (placeholder) {
-          output += parsedValue[0];
-          parsedValue = parsedValue.slice(1);
-          lastPlaceholderPos = i;
-        } else {
-          output += this.rxmask[i];
-          // If mask symbol is between initial cursor position and current (increased) cursor position, increase cursorPos
-          if (i < this.cursorPos && i >= prevCursorPos - this._diff) this.cursorPos++;
-        }
-      } else {
-        if (this.showMask > i) {
-          if (placeholder) {
-            output += this.placeholderSymbol;
-            hasPlaceholder = true;
-          } else {
-            output += this.rxmask[i];
-          }
-          if (this.cursorPos > i) this.cursorPos = i;
-          if ((this._diff >= 0 || lastPlaceholderPos === -1) && !hasPlaceholder) this.cursorPos++;
-        } else if (!placeholder && this._diff >= 0 && !hasPlaceholder) {
-          output += this.rxmask[i];
-          if (this.cursorPos > lastPlaceholderPos) this.cursorPos++;
+      // This condition checks if placeholder was found
+      if (this.rxmask[i].match(/\[.*\]/)) {
+        if (parsedValue.length > 0) {
+          output += parsedValue.shift();
+        } else if (this.showMask > i) {
+          output += this.placeholderSymbol;
+          encounteredPlaceholder = true;
         } else {
           break;
         }
+        if (this._actualCursorPos > 0) this.cursorPos++;
+        this._actualCursorPos--; // reduce this because one symbol or placeholder was added
+      } else {
+        // Add mask symbol if
+        if (
+          // mask is not fully shown according to this.showMask
+          this.showMask > i ||
+          // or there's some parsed characters left to add
+          parsedValue.length > 0 ||
+          // or this mask symbol is following parsedValue character and user just added symbols (not removed)
+          // (example - If with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -)
+          (!encounteredPlaceholder && this._diff >= 0)
+        ) {
+          output += this.rxmask[i];
+        } else {
+          break;
+        }
+        // Add 1 to cursorPos if
+        if (
+          // no placeholder was encountered, parsedValue is empty and this mask symbol should be shown
+          // (this ensures that cursor position will be always set just before first placeholder if parsedValue is empty)
+          (!encounteredPlaceholder && parsedValueEmpty && this.showMask > i) ||
+          // or according to _actualCursorPos not all characters from parsedValue before cursorPos were added yet
+          this._actualCursorPos > 0 ||
+          // or all characters from parsedValue before cursorPos were added, but no placeholders yet (or it will be negative) and user just added symbols (see example above)
+          (this._actualCursorPos === 0 && this._diff >= 0)
+        ) {
+          this.cursorPos++;
+        }
       }
     }
-
-    // ! Old comments, place them where they needed
-    // Add mask until its length is this.showMask
-    // If showMask is greater than parsed value length, cursor should be moved to the position just next to last symbol from parsedValue
-    // This while block causes mask symbols to be added after last character only if user added something
-    // Example is if with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -
 
     // Stop user from adding symbols after mask is completed
     if (parsedValue.length > 0) {

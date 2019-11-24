@@ -13,9 +13,6 @@
 * deletion in the middle for regex input
 
 ## Bugs
-* ! Regex mask is somewhat broken when trying to add characters before some typed characters (not yet covered by tests)
 * "Stop user from adding characters after mask is completed" is bugged for CTRL+V (if pasting adds to much characters, it will not be added)
-* CursorPos after Selection + pasting works incorrectly due to _diff value
-* If user adds character, that is "placeholderSymbol" (if was allowed), cursor will move (should not)
 * Place cursor before - in `***-**-**`, press delete - nothing happens (expected behavior?)
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
