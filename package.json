@@ -1,6 +1,6 @@
 {
   "name": "rxmask",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
   "main": "rxmask.js",
   "scripts": {
@@ -8,8 +8,7 @@
   },
   "author": "Konstantin Meshavkin",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "keywords": [
     "rxmask",
     "mask",
