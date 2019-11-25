@@ -26,7 +26,7 @@ export default class Parser {
         }
         const noMaskValue = this.parseOutMask();
         const parsedValue = this.parseAllowedValue(noMaskValue);
-        this._output = this.getOutput(parsedValue, this.cursorPos);
+        this._output = this.getOutput(parsedValue);
         this._prevValue = this._output;
     }
     // Idea here is to parse everything before cursor position as is,
@@ -39,18 +39,17 @@ export default class Parser {
         this._diff = diff;
         // Get value before cursor without mask symbols
         let beforeCursor = '';
-        for (let i = 0; i < this.value.length; i++) {
-            if (this.value[i] !== this.rxmask[i] && this.value[i] !== this.placeholderSymbol && i < this.cursorPos) {
+        for (let i = 0; i < this.cursorPos; i++) {
+            if (this.value[i] !== this.rxmask[i] && this.value[i] !== this.placeholderSymbol) {
                 beforeCursor += this.value[i];
             }
         }
         // Get value after cursor without mask symbols
         let afterCursor = '';
-        for (let i = 0; i < this.value.length - this.cursorPos; i++) {
+        for (let i = this.cursorPos; i < this.value.length; i++) {
             // Diff used here to "shift" mask to position where it supposed to be
-            if (this.value[i + this.cursorPos] !== this.rxmask[i + this.cursorPos - diff] &&
-                this.value[i + this.cursorPos] !== this.placeholderSymbol) {
-                afterCursor += this.value[i + this.cursorPos];
+            if (this.value[i] !== this.rxmask[i - diff] && this.value[i] !== this.placeholderSymbol) {
+                afterCursor += this.value[i];
             }
         }
         this._actualCursorPos = beforeCursor.length; // it holds position of cursor after input was parsed
@@ -78,7 +77,8 @@ export default class Parser {
         }
         return parsedValue;
     }
-    getOutput([...parsedValue], prevCursorPos) {
+    getOutput([...parsedValue]) {
+        const prevCursorPos = this.cursorPos;
         this.cursorPos = 0; // We don't need initial cursorPos anymore
         let output = '';
         const parsedValueEmpty = parsedValue.length === 0;
@@ -136,10 +136,6 @@ export default class Parser {
         return output;
     }
 }
-// Currently unused, parses string and escapes any character that is special to RegExp
-// function regexLiteral(str: string) {
-//   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-// }
 (function processInputs() {
     const DOMInputs = document.getElementsByClassName('rxmask');
     for (let i = 0; i < DOMInputs.length; i++) {
