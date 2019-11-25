@@ -102,6 +102,34 @@ describe('Simple input with values restricted to numbers', () => {
       .and('have.prop', 'selectionStart', 0);
   });
 
+  it('should correctly parse multiple pasted characters', () => {
+    cy.get('input.simple')
+      .invoke('val', '123')
+      .trigger('input')
+      .should('have.value', '123-')
+      .and('have.prop', 'selectionStart', 4)
+      .clear()
+      .invoke('val', '1234567')
+      .trigger('input')
+      .should('have.value', '123-45-67')
+      .and('have.prop', 'selectionStart', 9)
+      .clear()
+      .invoke('val', '123-45-67')
+      .trigger('input')
+      .should('have.value', '123-45-67')
+      .and('have.prop', 'selectionStart', 9)
+      .clear()
+      .invoke('val', '123-456-7')
+      .trigger('input')
+      .should('have.value', '123-45-67')
+      .and('have.prop', 'selectionStart', 9)
+      .clear()
+      .invoke('val', '-a-12-3&-45$6-G7')
+      .trigger('input')
+      .should('have.value', '123-45-67')
+      .and('have.prop', 'selectionStart', 9);
+  });
+
   it('should not allow to add more characters after mask is complete', () => {
     cy.get('input.simple')
       .type('123456')
@@ -129,34 +157,6 @@ describe('Simple input with values restricted to numbers', () => {
       .type('{leftarrow}{leftarrow}{leftarrow}c5G')
       .should('have.value', '125-34-')
       .and('have.prop', 'selectionStart', 4);
-  });
-
-  it('should correctly parse multiple pasted characters', () => {
-    cy.get('input.simple')
-      .invoke('val', '123')
-      .trigger('input')
-      .should('have.value', '123-')
-      .and('have.prop', 'selectionStart', 4)
-      .clear()
-      .invoke('val', '1234567')
-      .trigger('input')
-      .should('have.value', '123-45-67')
-      .and('have.prop', 'selectionStart', 9)
-      .clear()
-      .invoke('val', '123-45-67')
-      .trigger('input')
-      .should('have.value', '123-45-67')
-      .and('have.prop', 'selectionStart', 9)
-      .clear()
-      .invoke('val', '123-456-7')
-      .trigger('input')
-      .should('have.value', '123-45-67')
-      .and('have.prop', 'selectionStart', 9)
-      .clear()
-      .invoke('val', '-a-12-3&-45$6-G7')
-      .trigger('input')
-      .should('have.value', '123-45-67')
-      .and('have.prop', 'selectionStart', 9);
   });
 });
 
