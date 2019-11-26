@@ -10,11 +10,7 @@
 * Add more tests for cursorPos for showMask tests (both part and full)
 * Add tests for Parser class and onInput() function
 * test CTRL+backspace
-* deletion in the middle for regex input
 
 ## Bugs
-* refactor parseOutMask() + parseAllowedValue()
-* refactor parseAllowedValue()
-* "Stop user from adding characters after mask is completed" is bugged for CTRL+V (if pasting adds to much characters, it will not be added)
 * Place cursor before - in `***-**-**`, press delete - nothing happens (expected behavior?)
 * NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)

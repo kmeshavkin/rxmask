@@ -9,7 +9,7 @@ export default class Parser {
 
   private _output: string;
   private _prevValue: string;
-  private _diff: number;
+  private _isRemovingSymbols: boolean;
   private _actualCursorPos: number;
 
   constructor() {
@@ -23,7 +23,7 @@ export default class Parser {
     // Private properties
     this._output = '';
     this._prevValue = '';
-    this._diff = 0;
+    this._isRemovingSymbols = false;
     this._actualCursorPos = 0;
   }
 
@@ -39,7 +39,7 @@ export default class Parser {
       });
     }
     const noMaskValue = this.parseOutMask();
-    const parsedValue = this.parseAllowedValue(noMaskValue);
+    const parsedValue = this.parseRxmask(noMaskValue);
     this._output = this.getOutput(parsedValue);
     this._prevValue = this._output;
   }
@@ -51,22 +51,33 @@ export default class Parser {
   parseOutMask() {
     // Get length diff between old and current value
     const diff = this.value.length - this._prevValue.length;
-    this._diff = diff;
-
-    // Get value before cursor without mask symbols
-    let beforeCursor = '';
-    for (let i = 0; i < this.cursorPos; i++) {
-      if (this.value[i] !== this.rxmask[i] && this.value[i] !== this.placeholderSymbol) {
-        beforeCursor += this.value[i];
-      }
-    }
+    this._isRemovingSymbols = diff >= 0 ? false : true;
 
     // Get value after cursor without mask symbols
     let afterCursor = '';
     for (let i = this.cursorPos; i < this.value.length; i++) {
       // Diff used here to "shift" mask to position where it supposed to be
-      if (this.value[i] !== this.rxmask[i - diff] && this.value[i] !== this.placeholderSymbol) {
+      if (
+        this.value[i] !== this.rxmask[i - diff] &&
+        this.value[i] !== this.placeholderSymbol &&
+        this.value[i].match(this.allowedCharacters)
+      ) {
         afterCursor += this.value[i];
+      }
+    }
+
+    // Get value before cursor without mask symbols
+    let beforeCursor = '';
+    for (let i = 0; i < this.cursorPos; i++) {
+      if (
+        this.value[i] !== this.rxmask[i] &&
+        this.value[i] !== this.placeholderSymbol &&
+        this.value[i].match(this.allowedCharacters)
+      ) {
+        // If parsed value length before cursor so far less than
+        // amount of allowed symbols in rxmask minus parsed value length after cursor, add symbol
+        if (beforeCursor.length < this.rxmask.filter(pattern => pattern.match(/\[.*\]/)).length - afterCursor.length)
+          beforeCursor += this.value[i];
       }
     }
 
@@ -74,21 +85,18 @@ export default class Parser {
     return beforeCursor + afterCursor;
   }
 
-  parseAllowedValue([...noMaskValue]: string) {
+  parseRxmask([...noMaskValue]: string) {
     let parsedValue = '';
     const rxmask = this.rxmask.filter(pattern => pattern.match(/\[.*\]/));
     let i = 0;
     while (noMaskValue.length > 0 && i < noMaskValue.length) {
-      if (noMaskValue[i].match(this.allowedCharacters) && noMaskValue[i].match(new RegExp(rxmask[i]))) {
+      if (noMaskValue[i].match(new RegExp(rxmask[i]))) {
         parsedValue += noMaskValue[i];
         i++;
-      } else if (noMaskValue[i].match(this.allowedCharacters)) {
-        noMaskValue.shift();
-        if (this._actualCursorPos > i) this._actualCursorPos--;
       } else {
         noMaskValue.shift();
         // This line returns cursor to appropriate position according to removed elements
-        this._actualCursorPos--;
+        if (this._actualCursorPos > i) this._actualCursorPos--;
       }
     }
 
@@ -96,7 +104,6 @@ export default class Parser {
   }
 
   getOutput([...parsedValue]: string) {
-    const prevCursorPos = this.cursorPos;
     this.cursorPos = 0; // We don't need initial cursorPos anymore
     let output = '';
     const parsedValueEmpty = parsedValue.length === 0;
@@ -123,7 +130,7 @@ export default class Parser {
           parsedValue.length > 0 ||
           // or this mask symbol is following parsedValue character and user just added symbols (not removed)
           // (example - If with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -)
-          (!encounteredPlaceholder && this._diff >= 0)
+          (!encounteredPlaceholder && !this._isRemovingSymbols)
         ) {
           output += this.rxmask[i];
         } else {
@@ -137,17 +144,11 @@ export default class Parser {
           // or according to _actualCursorPos not all characters from parsedValue before cursorPos were added yet
           this._actualCursorPos > 0 ||
           // or all characters from parsedValue before cursorPos were added, but no placeholders yet (or it will be negative) and user just added symbols (see example above)
-          (this._actualCursorPos === 0 && this._diff >= 0)
+          (this._actualCursorPos === 0 && !this._isRemovingSymbols)
         ) {
           this.cursorPos++;
         }
       }
-    }
-
-    // Stop user from adding symbols after mask is completed
-    if (parsedValue.length > 0) {
-      this.cursorPos = prevCursorPos - this._diff;
-      return this._prevValue;
     }
 
     return output;

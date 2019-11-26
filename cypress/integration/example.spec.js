@@ -140,7 +140,15 @@ describe('Simple input with values restricted to numbers', () => {
       .and('have.prop', 'selectionStart', 9)
       .type('{leftarrow}1')
       .should('have.value', '123-45-67')
-      .and('have.prop', 'selectionStart', 8);
+      .and('have.prop', 'selectionStart', 8)
+      .type('{leftarrow}{leftarrow}1')
+      .should('have.value', '123-45-67')
+      .and('have.prop', 'selectionStart', 7)
+      .clear()
+      .invoke('val', '87654321')
+      .trigger('input')
+      .should('have.value', '876-54-32')
+      .and('have.prop', 'selectionStart', 9);
   });
 
   it('should not allow to paste unsupported symbols', () => {
