@@ -21,7 +21,10 @@ Simple to install and use, but advanced mask package.
 Playground will be provided later. For now you can see `example/example.html` in the project.
 
 ## <a name="Installation"></a>Installation
-`npm i rxmask` or download `rxmask.js` file (rxmask.min.js with polyfills will be provided later).
+* To use it in your project as package (to import it) use `npm i rxmask`
+* To use it in browser for plain html download `rxmask.min.js` file from `src/rxmask.min.js` (minified and polyfilled).
+
+You can also view source code in `./src folder`: `rxmask.ts` for typescript or `rxmask.js` for javascript.
 
 Then you have three options.
 
@@ -29,13 +32,18 @@ Then you have three options.
 It will work for simple plain html files
 ```HTML
 <head>
-  <script type="module" src="../src/rxmask.js"></script>
+  <script src="../src/rxmask.min.js"></script>
 </head>
 <body>
   <input class="rxmask" mask="***-**-**" placeholderSymbol="*" allowedCharacters="[0-9]"/>
 </body>
 ```
 You should include `class="rxmask"` in your input - it's the only way for script to automatically parse DOM tree for inputs to be applied mask to. Also you can add any of the [Options](#Installation/Options) **in the first section** to the input as properties. See `example.html` for more some examples.
+
+You can also use unminified `rxmask.js` file, though I recommend to use minified due to far smaller size and superior browser support. If you still want to use unminified version (I used it in example for easier debugging), replace `<script>` tag with this:
+```HTML
+<script type="module" src="../src/rxmask.js"></script>
+```
 
 ### Import `Parser` class and `onInput` function from imported `rxmask.js` file
 Create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
@@ -89,7 +97,7 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
 ```
 
 ## <a name="Notes"></a>Notes
-* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
+* NOT Unicode friendly - but planned (or any character that is represented by more than one UTF-16 code unit for that matter)
 
 ## <a name="Testing"></a>Testing
 I use Live Server extension for VSCode for easier testing.

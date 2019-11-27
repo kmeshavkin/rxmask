@@ -1,14 +1,14 @@
 {
   "name": "rxmask",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
-  "main": "./src/compiled/rxmask.js",
+  "main": "./src/rxmask.js",
   "scripts": {
-    "test": "cypress open"
+    "test": "cypress open",
+    "build": "webpack"
   },
   "author": "Konstantin Meshavkin",
   "license": "MIT",
-  "dependencies": {},
   "keywords": [
     "rxmask",
     "mask",
@@ -21,19 +21,22 @@
     "input",
     "parser"
   ],
+  "dependencies": {},
   "devDependencies": {
+    "@types/mocha": "^5.2.7",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
+    "cypress": "^3.6.1",
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.12.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.19.1",
     "typescript": "^3.7.2",
-    "@types/mocha": "^5.2.7",
-    "cypress": "^3.6.1"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
-  "types": ".src/compiled/rxmask.d.ts",
+  "types": "./src/rxmask.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kmeshavkin/rxmask.git"

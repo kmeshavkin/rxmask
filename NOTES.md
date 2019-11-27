@@ -2,7 +2,6 @@
 ### Overall
 * Better example (more examples where adding character that already in mask is useful + better styling + convey that any character can be used, including some that in mask + allow to play with mask and change params on the fly)
 * Better README (GIF at the top, something like plates with browser support, etc.)
-* Minify rxmask.js and add polyfills (then remove from README)
 * Provide options for class constructor (also maybe add option to disable trailing mask symbols (when `123` results in `123-` if mask is `***-**-**`)) (then remove from README)
 ### Tests
 * Add more tests for other inputs similar to simple input
