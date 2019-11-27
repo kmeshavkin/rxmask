@@ -1,8 +1,8 @@
 {
   "name": "rxmask",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
-  "main": "rxmask.js",
+  "main": "src/rxmask.js",
   "scripts": {
     "test": "cypress open"
   },
@@ -33,6 +33,7 @@
     "@types/mocha": "^5.2.7",
     "cypress": "^3.6.1"
   },
+  "types": "src/rxmask.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kmeshavkin/rxmask.git"

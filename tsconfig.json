@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es2015",
-    "strict": true
+    "strict": true,
+    "declaration": true,
+    "outDir": "src/compiled"
   },
   "include": [
     "**/*.ts",
