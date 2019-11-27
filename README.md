@@ -40,7 +40,7 @@ You should include `class="rxmask"` in your input - it's the only way for script
 ### Import `Parser` class and `onInput` function from imported `rxmask.js` file
 Create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
 
-Typescript support will be provided later.
+Typescript support (types file) is provided with package.
 
 ### Import just `Parser` class and provide it with required props yourself
 It's useful if you want to just parse value according to any mask, detached from any actual input element.
