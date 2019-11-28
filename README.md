@@ -20,16 +20,13 @@ Simple to install and use, but advanced mask package.
 ## <a name="Example"></a>Example
 Playground will be provided later. For now you can see `example/example.html` in the project.
 
+You can view source code in `./src folder`: `rxmask.ts` for typescript or `rxmask.js` for javascript.
+
 ## <a name="Installation"></a>Installation
-* To use it in your project as package (to import it) use `npm i rxmask`
-* To use it in browser for plain html download `rxmask.min.js` file from `src/rxmask.min.js` (minified and polyfilled).
-
-You can also view source code in `./src folder`: `rxmask.ts` for typescript or `rxmask.js` for javascript.
-
-Then you have three options.
-
 ### Use it in script tag
-It will work for simple plain html files
+It will work for simple plain html files.
+
+Download `rxmask.min.js` file from `src/rxmask.min.js` (minified and polyfilled).
 ```HTML
 <head>
   <script src="../src/rxmask.min.js"></script>
@@ -46,12 +43,14 @@ You can also use unminified `rxmask.js` file, though I recommend to use minified
 ```
 
 ### Import `Parser` class and `onInput` function from imported `rxmask.js` file
-Create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
+`npm i rxmask`, then create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
 
 Typescript support (types file) is provided with package.
 
 ### Import just `Parser` class and provide it with required props yourself
 It's useful if you want to just parse value according to any mask, detached from any actual input element.
+
+In that case use `npm i rxmask`.
 
 Note that under the hood class stores previous value, so if you want to just parse string once, you need to reinitialize class every time and it will assume that previous value was empty string (this is subject to change along with options for class).
 
@@ -97,7 +96,7 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
 ```
 
 ## <a name="Notes"></a>Notes
-* NOT Unicode friendly - but planned (or any character that is represented by more than one UTF-16 code unit for that matter)
+* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)- planned feature
 
 ## <a name="Testing"></a>Testing
 I use Live Server extension for VSCode for easier testing.
