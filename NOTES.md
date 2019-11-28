@@ -5,10 +5,9 @@
 * Provide options for class constructor (also maybe add option to disable trailing mask symbols (when `123` results in `123-` if mask is `***-**-**`)) (then remove from README)
 ### Tests
 * Add more tests for other inputs similar to simple input
-* Add more tests for cursorPos for showMask tests (both part and full)
-* Add tests for Parser class and onInput() function
-* test CTRL+backspace
+* Add tests for Parser class and onInput() function?
+* test CTRL+backspace?
 
 ## Bugs
 * Place cursor before - in `***-**-**`, press delete - nothing happens (expected behavior?)
-* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)
+* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter) - planned feature

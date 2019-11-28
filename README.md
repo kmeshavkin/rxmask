@@ -1,12 +1,16 @@
 # rxmask.js
 Simple to install and use, but advanced mask package.
 
+![minzipped size](https://img.shields.io/bundlephobia/minzip/rxmask)
+![downloads/month](https://img.shields.io/npm/dm/rxmask)
+![type definitions](https://img.shields.io/npm/types/rxmask)
+
 ## <a name="Features"></a>Features
 * Both module and simple HTML script
 * Flexible - allows to change mask, placeholder symbol format, show or hide unfilled mask (or even part of it) and more
 * Allows to use same characters that are present in mask
 * Allows to specify format for every character
-* Robust (test coverage using Cypress)
+* Robust (test coverage with Cypress)
 * No dependencies
 
 ## Table of contents
@@ -96,7 +100,7 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
 ```
 
 ## <a name="Notes"></a>Notes
-* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter)- planned feature
+* NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter) - planned feature
 
 ## <a name="Testing"></a>Testing
 I use Live Server extension for VSCode for easier testing.
