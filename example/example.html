@@ -26,6 +26,11 @@
   <br /><code>class="rxmask showMaskPart" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8"</code>
   <br /><br />
 
+  <div>Random mask - only part of mask is shown and trailing part is disabled</div>
+  <input class="rxmask showMaskPartTrailing" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8" trailing="false" />
+  <br /><code>class="rxmask showMaskPart" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8" trailing="false"</code>
+  <br /><br />
+
   <div>Regex mask - only certain symbols are allowed for each character (you don't need to specify "mask" property if "rxmask" is present (it will be ignored))</div>
   <input class="rxmask regex" rxmask="[A-Z][A-Z] [0-4][\d][\d]-[a-z][\d]" placeholderSymbol="*" showMask="true"/>
   <br /><code>class="rxmask" rxmask="[A-Z][A-Z] [0-4][\d][\d]-[a-z][\d]" placeholderSymbol="*" showMask="true"</code>

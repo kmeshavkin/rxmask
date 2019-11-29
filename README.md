@@ -67,6 +67,7 @@ These options can be provided both to `Parser` class itself and as `<input>` tag
 * `placeholderSymbol` - symbol, that specifies character that will be replaced in mask with user input.
 * `allowedCharacters` - characters allowed to be used in this input. If this option is present, all other characters will be ignored when user types them.
 * `showMask` - show whole mask, part of it or not show it at all (can be any `number`, but you can also provide `true` if you use `onInput` function or script tag).
+* `trailing` - if trailing is `true`, show trailing mask symbols. Example: if with mask `***--**-**` user types `123`, user will get `123--`, but if he removes symbol `4` from `123--4`, he will get just `123` without `-`. If trailing is disabled, regardless of user actions value `123` will always result in just `123`.
 
 Rest are class only options:
 * `value` - assign to it value you want to parse

@@ -480,6 +480,107 @@ describe('Input with partial showMask and allowed mask symbols', () => {
   });
 });
 
+describe('Input with partial showMask, allowed mask symbols and trailing is disabled', () => {
+  afterEach(() => {
+    cy.get('input.showMaskPartTrailing').clear();
+  });
+
+  it('should correctly apply mask for typed characters', () => {
+    cy.get('input.showMaskPartTrailing')
+      .should('have.value', ' _ [___]')
+      .type('a')
+      .should('have.value', ' a [___]')
+      .and('have.prop', 'selectionStart', 2)
+      .type('12')
+      .should('have.value', ' a [12_]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('3')
+      .should('have.value', ' a [123]')
+      .and('have.prop', 'selectionStart', 7)
+      .type('$% ')
+      .should('have.value', ' a [123] [$% ')
+      .and('have.prop', 'selectionStart', 13)
+      .type('[]')
+      .should('have.value', ' a [123] [$% ] [[]]')
+      .and('have.prop', 'selectionStart', 18);
+  });
+
+  it('should correctly apply mask for deleted characters', () => {
+    cy.get('input.showMaskPartTrailing')
+      .should('have.value', ' _ [___]')
+      .type('a123$% []')
+      .should('have.value', ' a [123] [$% ] [[]]')
+      .and('have.prop', 'selectionStart', 18)
+      .type('{backspace}')
+      .should('have.value', ' a [123] [$% ] [[')
+      .and('have.prop', 'selectionStart', 17)
+      .type('{backspace}')
+      .should('have.value', ' a [123] [$% ')
+      .and('have.prop', 'selectionStart', 13)
+      .type('{backspace}{backspace}')
+      .should('have.value', ' a [123] [$')
+      .and('have.prop', 'selectionStart', 11)
+      .type('{backspace}')
+      .should('have.value', ' a [123]')
+      .and('have.prop', 'selectionStart', 7)
+      .type('{backspace}{backspace}')
+      .should('have.value', ' a [1__]')
+      .and('have.prop', 'selectionStart', 5)
+      .type('{backspace}')
+      .should('have.value', ' a [___]')
+      .and('have.prop', 'selectionStart', 2)
+      .type('{backspace}')
+      .should('have.value', ' _ [___]')
+      .and('have.prop', 'selectionStart', 1)
+      .type('{backspace}')
+      .should('have.value', ' _ [___]')
+      .and('have.prop', 'selectionStart', 1);
+  });
+
+  it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
+    cy.get('input.showMaskPartTrailing')
+      .should('have.value', ' _ [___]')
+      .type('a12')
+      .should('have.value', ' a [12_]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{leftarrow}{leftarrow}3')
+      .should('have.value', ' a [312]')
+      .and('have.prop', 'selectionStart', 5)
+      .type('$% ')
+      .should('have.value', ' a [3$%] [ 12')
+      .and('have.prop', 'selectionStart', 11)
+      .type('[]')
+      .should('have.value', ' a [3$%] [ []] [12]')
+      .and('have.prop', 'selectionStart', 13);
+  });
+
+  it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
+    cy.get('input.showMaskPartTrailing')
+      .should('have.value', ' _ [___]')
+      .type('a123$% []')
+      .should('have.value', ' a [123] [$% ] [[]]')
+      .and('have.prop', 'selectionStart', 18)
+      .type('{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}{backspace}')
+      .should('have.value', ' a [123] [% [] []')
+      .and('have.prop', 'selectionStart', 7)
+      .type('{backspace}')
+      .should('have.value', ' a [12%] [ []')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{del}{del}')
+      .should('have.value', ' a [12[] []')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{del}')
+      .should('have.value', ' a [12]]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{del}')
+      .should('have.value', ' a [12_]')
+      .and('have.prop', 'selectionStart', 6)
+      .type('{backspace}{backspace}{backspace}{backspace}')
+      .should('have.value', ' _ [___]')
+      .and('have.prop', 'selectionStart', 1);
+  });
+});
+
 describe('Input with showMask and regex mask', () => {
   afterEach(() => {
     cy.get('input.regex').clear();

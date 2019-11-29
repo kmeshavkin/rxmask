@@ -6,6 +6,7 @@ export default class Parser {
   cursorPos: number;
   allowedCharacters: string;
   showMask: number;
+  trailing: boolean;
 
   private _output: string;
   private _prevValue: string;
@@ -18,6 +19,7 @@ export default class Parser {
     this.rxmask = [];
     this.allowedCharacters = '.';
     this.showMask = 0;
+    this.trailing = true;
     this.value = '';
     this.cursorPos = 0;
     // Private properties
@@ -107,6 +109,7 @@ export default class Parser {
     this.cursorPos = 0; // We don't need initial cursorPos anymore
     let output = '';
     const parsedValueEmpty = parsedValue.length === 0;
+    const isMaskFilled = this.rxmask.filter(pattern => pattern.match(/\[.*\]/)).length === parsedValue.length;
     let encounteredPlaceholder = false; // stores if loop found a placeholder at least once
     for (let i = 0; i < this.rxmask.length; i++) {
       // This condition checks if placeholder was found
@@ -126,11 +129,11 @@ export default class Parser {
         if (
           // mask is not fully shown according to this.showMask
           this.showMask > i ||
-          // or there's some parsed characters left to add
+          // OR there's some parsed characters left to add
           parsedValue.length > 0 ||
-          // or this mask symbol is following parsedValue character and user just added symbols (not removed)
-          // (example - If with mask ***--**-** user types 123, user will get 123--, but if he removes symbol 4 from 123--4, he will get just 123 without -)
-          (!encounteredPlaceholder && !this._isRemovingSymbols)
+          // OR this mask symbol is following parsedValue character AND user just added symbols (not removed)
+          // AND (trailing should be enabled OR mask is filled, then add trailing symbols anyway) - see example in README under `trailing` option
+          ((this.trailing || isMaskFilled) && !encounteredPlaceholder && !this._isRemovingSymbols)
         ) {
           output += this.rxmask[i];
         } else {
@@ -138,13 +141,14 @@ export default class Parser {
         }
         // Add 1 to cursorPos if
         if (
-          // no placeholder was encountered, parsedValue is empty and this mask symbol should be shown
+          // no placeholder was encountered AND parsedValue is empty AND this mask symbol should be shown
           // (this ensures that cursor position will be always set just before first placeholder if parsedValue is empty)
           (!encounteredPlaceholder && parsedValueEmpty && this.showMask > i) ||
-          // or according to _actualCursorPos not all characters from parsedValue before cursorPos were added yet
+          // OR according to _actualCursorPos not all characters from parsedValue before cursorPos were added yet
           this._actualCursorPos > 0 ||
-          // or all characters from parsedValue before cursorPos were added, but no placeholders yet (or it will be negative) and user just added symbols (see example above)
-          (this._actualCursorPos === 0 && !this._isRemovingSymbols)
+          // OR all characters from parsedValue before cursorPos were added AND no placeholders yet (or _actualCursorPos will be negative)
+          // AND user just added symbols (see example in README under `trailing` option)
+          (this.trailing && this._actualCursorPos === 0 && !this._isRemovingSymbols)
         ) {
           this.cursorPos++;
         }
@@ -174,6 +178,7 @@ export function onInput(input: HTMLTextAreaElement, parser: Parser) {
   parser.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
   parser.allowedCharacters = input.getAttribute('allowedCharacters') || '.';
   parser.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
+  parser.trailing = input.getAttribute('trailing') === 'false' ? false : true;
   parser.value = input.value;
   parser.cursorPos = input.selectionStart;
   // Call parser

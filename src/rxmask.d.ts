@@ -6,6 +6,7 @@ export default class Parser {
     cursorPos: number;
     allowedCharacters: string;
     showMask: number;
+    trailing: boolean;
     private _output;
     private _prevValue;
     private _isRemovingSymbols;
