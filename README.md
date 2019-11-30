@@ -18,8 +18,8 @@ Easy to install and use, but advanced mask package.
 * [Example](#Example)
 * [Installation](#Installation)
   1. [Use it in script tag](#Installation/ScriptTag)
-  2. [Import `Parser` class from `rxmask.js` and provide it with options and your own input object](#Installation/ImportClassInput)
-  3. [Import just `Parser` class and provide it with options yourself](#Installation/ImportClass)
+  2. [Use it for existing `input` object (`<HTMLTextAreaElement>` type)](#Installation/Input)
+  3. [Use it to parse raw string value](#Installation/RawString)
   * [Options](#Installation/Options)
 * [Notes](#Notes)
 * [Testing](#Testing)
@@ -52,7 +52,7 @@ You can also use unminified `rxmask.js` file, though it's recommended to use min
 <script type="module" src="../src/rxmask.js"></script>
 ```
 
-### <a name="Installation/ImportClassInput"></a>Import `Parser` class from `rxmask.js` and provide it with options and your own input object
+### <a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` type)
 * `npm i rxmask`
 * Import `Parser` class (it has default export).
 * Create instance of `Parser` class and provide it with options alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
@@ -60,14 +60,14 @@ You can also use unminified `rxmask.js` file, though it's recommended to use min
 
 Example:
 ```javascript
-  import Parser from 'rxmask';
+  import rxmask from 'rxmask';
   const input = document.getElementsByClassName('rxmask')[0];
   const input = DOMInputs[i];
-  const parser = new Parser({}, input);
+  const parser = new rxmask({}, input);
   input.oninput = () => parser.onInput();
 ```
 
-### <a name="Installation/ImportClass"></a>Import just `Parser` class and provide it with options yourself
+### <a name="Installation/RawString"></a>Use it to parse raw string value
 It's useful if you want to just parse value according to any mask, detached from any actual input element.
 
 * `npm i rxmask`
@@ -77,9 +77,10 @@ It's useful if you want to just parse value according to any mask, detached from
 
 Example:
 ```javascript
+  import rxmask from 'rxmask';
   const parser = new rxmask({ mask: '***-**-**', placeholderSymbol: '*' });
   // You can provide value as an option, but it's recommended to add value separately every time before calling parseMask()
-  parser.value = '1234';
+  parser.options.value = '1234';
   parser.parseMask();
   // parser.output will have value of '123-4', finalCursorPos will have value of 5
 ```
@@ -95,13 +96,15 @@ These options can be provided both to `Parser` class itself (through options or 
 * `showMask` - show whole mask, part of it or not show it at all (can be any `number`, but you can also provide `true` if you use `onInput` function or script tag).
 * `trailing` - if trailing is `true`, show trailing mask symbols. Example: if with mask `***--**-**` user types `123`, user will get `123--`, but if he removes symbol `4` from `123--4`, he will get just `123` without `-`. If trailing is disabled, regardless of user actions value `123` will always result in just `123`.
 
-Rest are class only options:
+These are class only options:
 * `value` - assign to it value you want to parse
 * `cursorPos` - you can assign to it cursor position value (in case of `<input>` it's `selectionStart` property). After `parseMask()` was called, `finalCursorPos` will be updated with appropriate value.
-* `parseMask()` method - you should call this method when you assigned all required parameters to `Parser` yourself. It will parse the mask and update `output` and `finalCursorPos` values.
-* `onInput()` method - you should call this method when you provided `Parser` class with `input` object. It will get all properties from provided `input`, call `parseMask()` and update `output` and `finalCursorPos` values.
+
+Also class has two important methods and two properties:
 * `output` - parsed `value`. Grab it after you called `parseMask()`. This value is the correct field to use as parsed mask value.
 * `finalCursorPos` - modified `cursorPos`. Grab it after you called `parseMask()`. This value is the correct cursor position to use for your input.
+* `parseMask()` method - you should call this method when you assigned all required parameters to `Parser` yourself. It will parse the mask and update `output` and `finalCursorPos` values.
+* `onInput()` method - you should call this method when you provided `Parser` class with `input` object. It will get all properties from provided `input`, call `parseMask()` and update `output` and `finalCursorPos` values.
 
 ## <a name="Notes"></a>Notes
 * Typescript support (types file) is provided with package.

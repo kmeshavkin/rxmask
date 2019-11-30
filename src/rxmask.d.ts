@@ -52,12 +52,12 @@ export default class Parser {
      * @param {string | null | undefined} str rxmask string representation or null or undefined
      * @return {string[]} parsed rxmask or empty array
      */
-    strToRxmask(str: string | null | undefined): RegExpMatchArray;
+    private strToRxmask;
     /**
      * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement
      * @param {any} val Value from input object
      * @return {undefined | any} val or undefined if val is null
      */
-    parseNull(val: any): any;
+    private parseNull;
 }
 export {};

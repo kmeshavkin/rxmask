@@ -235,7 +235,7 @@ export default class Parser {
    * @param {string | null | undefined} str rxmask string representation or null or undefined
    * @return {string[]} parsed rxmask or empty array
    */
-  strToRxmask(str: string | null | undefined) {
+  private strToRxmask(str: string | null | undefined) {
     return (str || '').match(/(\[.*?\])|(.)/g) || [];
   }
 
@@ -244,7 +244,7 @@ export default class Parser {
    * @param {any} val Value from input object
    * @return {undefined | any} val or undefined if val is null
    */
-  parseNull(val: any) {
+  private parseNull(val: any) {
     return val === null ? undefined : val;
   }
 }
