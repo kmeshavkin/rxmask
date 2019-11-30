@@ -47,16 +47,34 @@ You can also use unminified `rxmask.js` file, though I recommend to use minified
 ```
 
 ### Import `Parser` class and `onInput` function from imported `rxmask.js` file
-`npm i rxmask`, then create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
+* `npm i rxmask`
+* Import `Parser` class (it has default export) and `onInput()` function: `import rxmask, { onInput } from 'rxmask'`
+* Create instance of `Parser` class and provide it to `onInput` function alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type):
+```javascript
+  const parser = new rxmask();
+  onInput(input, parser);
+```
 
 Typescript support (types file) is provided with package.
 
 ### Import just `Parser` class and provide it with required props yourself
 It's useful if you want to just parse value according to any mask, detached from any actual input element.
 
-In that case use `npm i rxmask`.
+* `npm i rxmask`
+* Import `Parser` class: `import rxmask from 'rxmask'`
+* Create instance of `Parser` class and add any required options to it with at least input value (and also cursor position if you need to recalculate it), then call `parseMask()` to precess input value:
+```javascript
+  const parser = new rxmask();
+  parser.mask = '***-**-**';
+  parser.placeholderSymbol = '*';
+  // ... and any other options, provide them at least once
+  // Then provide value (and cursorPos if needed) and call parseMask()
+  parser.value = '1234';
+  parser.parseMask();
+  // parser.output will have value of '123-4' 
+```
 
-Note that under the hood class stores previous value, so if you want to just parse string once, you need to reinitialize class every time and it will assume that previous value was empty string (this is subject to change along with options for class).
+Note that under the hood class stores previous value, so if you want to just parse string once, you need to reinitialize class every time and it will assume that previous value was empty string (this is subject to change).
 
 Options for class constructor will be provided later.
 
@@ -79,7 +97,7 @@ Here's example from `rxmask.ts` of how you can set up your own parser.
 
 In this example <HTMLTextAreaElement> input used for parameters parsing, but you can use any other input (with according methods) or just provide `mask` and other parameters yourself.
 
-In this example I call `onInput()` function every time `<input>` changes and assign parameters like `mask`, `placeholderSymbol` and others every time to be able to parse values correctly even if some of parameters on the input changes. You can assign all parameters except `value` and `cursorPos` only once and then just update `value` and `cursorPos` every time before `parseMask()` method call.
+Here I call `onInput()` function every time `<input>` changes and assign parameters like `mask`, `placeholderSymbol` and others every time to be able to parse values correctly even if some of parameters on the input changes. You can assign all parameters except `value` and `cursorPos` only once and then just update `value` and `cursorPos` every time before `parseMask()` method call.
 
 ```javascript
 function onInput(input: HTMLTextAreaElement, parser: Parser) {
@@ -88,8 +106,8 @@ function onInput(input: HTMLTextAreaElement, parser: Parser) {
   parser.placeholderSymbol = input.getAttribute('placeholderSymbol') || '*';
   parser.rxmask = (input.getAttribute('rxmask') || '').match(/(\[.*?\])|(.)/g) || [];
   parser.allowedCharacters = input.getAttribute('allowedCharacters') || '.';
-  parser.showMask =
-    input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
+  parser.showMask = input.getAttribute('showMask') === 'true' ? Infinity : Number(input.getAttribute('showMask'));
+  parser.trailing = input.getAttribute('trailing') === 'false' ? false : true;
   parser.value = input.value;
   parser.cursorPos = input.selectionStart;
   // Call parser
