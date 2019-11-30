@@ -1,4 +1,14 @@
-export default class Parser {
+interface InputOptions {
+    mask?: string;
+    placeholderSymbol?: string;
+    rxmask?: string;
+    value?: string;
+    cursorPos?: number;
+    allowedCharacters?: string;
+    showMask?: number;
+    trailing?: boolean;
+}
+interface Options {
     mask: string;
     placeholderSymbol: string;
     rxmask: string[];
@@ -7,15 +17,25 @@ export default class Parser {
     allowedCharacters: string;
     showMask: number;
     trailing: boolean;
+}
+export default class Parser {
+    options: Options;
+    input: HTMLTextAreaElement | undefined;
     private _output;
     private _prevValue;
     private _isRemovingSymbols;
     private _actualCursorPos;
-    constructor();
+    private _finalCursorPos;
+    constructor(options?: InputOptions, input?: HTMLTextAreaElement);
     readonly output: string;
+    readonly finalCursorPos: number;
+    setOptions({ mask, placeholderSymbol, rxmask, allowedCharacters, showMask, trailing, value, cursorPos }: InputOptions): void;
+    onInput(): void;
     parseMask(): void;
-    parseOutMask(): string;
-    parseRxmask([...noMaskValue]: string): string;
-    getOutput([...parsedValue]: string): string;
+    private parseOutMask;
+    private parseRxmask;
+    private getOutput;
+    strToRxmask(str: string | null | undefined): RegExpMatchArray;
+    parseNull(val: any): any;
 }
-export declare function onInput(input: HTMLTextAreaElement, parser: Parser): void;
+export {};
