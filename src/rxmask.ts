@@ -52,7 +52,10 @@ export default class Parser {
     return this._finalCursorPos;
   }
 
-  // This takes options from input (if present) or from provided values, if input and provided value is undefined, do not change value
+  /**
+   * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
+   * @param {InputOptions} options Options to set
+   */
   setOptions({
     mask,
     placeholderSymbol,
@@ -93,6 +96,11 @@ export default class Parser {
     }
   }
 
+  /**
+   * If this method is called, it will cause options update (with this.input values), call of this.parseMask()
+   * and update of new value of this.input (this.input.value) and cursor position (this.input.setSelectionRange)
+   * according to changes introduced by this.parseMask()
+   */
   onInput() {
     // Assign params every time in case it changes on the fly
     this.setOptions({});
@@ -105,6 +113,9 @@ export default class Parser {
     }
   }
 
+  /**
+   * Call this to update this.output and this.finalCursorPos according to options currently provided in this.options
+   */
   parseMask() {
     const noMaskValue = this.parseOutMask();
     const parsedValue = this.parseRxmask(noMaskValue);
@@ -219,10 +230,20 @@ export default class Parser {
     return output;
   }
 
+  /**
+   * Converts string representation of rxmask to array
+   * @param {string | null | undefined} str rxmask string representation or null or undefined
+   * @return {string[]} parsed rxmask or empty array
+   */
   strToRxmask(str: string | null | undefined) {
     return (str || '').match(/(\[.*?\])|(.)/g) || [];
   }
 
+  /**
+   * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement
+   * @param {any} val Value from input object
+   * @return {undefined | any} val or undefined if val is null
+   */
   parseNull(val: any) {
     return val === null ? undefined : val;
   }
