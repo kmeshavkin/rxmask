@@ -67,12 +67,13 @@ export default class Parser {
     cursorPos
   }: InputOptions) {
     if (this.input) {
-      mask = this.parseNull(this.input.getAttribute('mask'));
-      placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol'));
-      rxmask = this.parseNull(this.input.getAttribute('rxmask'));
-      allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters'));
+      mask = this.parseNull(this.input.getAttribute('mask')) || mask;
+      placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol')) || placeholderSymbol;
+      rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
+      allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
       showMask =
-        this.input.getAttribute('showMask') === 'true' ? Infinity : Number(this.input.getAttribute('showMask'));
+        (this.input.getAttribute('showMask') === 'true' ? Infinity : Number(this.input.getAttribute('showMask'))) ||
+        showMask;
       if (this.input.getAttribute('trailing') !== null) trailing = this.input.getAttribute('trailing') === 'true';
       value = this.parseNull(this.input.value);
       cursorPos = this.input.selectionStart;
