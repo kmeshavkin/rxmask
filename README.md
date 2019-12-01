@@ -62,7 +62,6 @@ Example:
 ```javascript
   import rxmask from 'rxmask';
   const input = document.getElementsByClassName('rxmask')[0];
-  const input = DOMInputs[i];
   const parser = new rxmask({}, input);
   input.oninput = () => parser.onInput();
 ```
