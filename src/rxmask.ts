@@ -31,14 +31,14 @@ export default class Parser {
     showMask: 0,
     trailing: true
   };
-  input: HTMLTextAreaElement | undefined;
+  input: HTMLTextAreaElement | HTMLInputElement | undefined;
   private _output: string = '';
   private _prevValue: string = '';
   private _isRemovingSymbols: boolean = false;
   private _actualCursorPos: number = 0;
   private _finalCursorPos: number = 0;
 
-  constructor(options?: InputOptions, input?: HTMLTextAreaElement) {
+  constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement) {
     this.input = input;
     this.setOptions(options || {});
     if (this.input) this.onInput();
@@ -241,7 +241,7 @@ export default class Parser {
   }
 
   /**
-   * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement
+   * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement or HTMLInputElement
    * @param {any} val Value from input object
    * @return {undefined | any} val or undefined if val is null
    */
@@ -251,7 +251,7 @@ export default class Parser {
 }
 
 (function processInputs() {
-  const DOMInputs = <HTMLCollectionOf<HTMLTextAreaElement>>document.getElementsByClassName('rxmask');
+  const DOMInputs = <HTMLCollectionOf<HTMLTextAreaElement | HTMLInputElement>>document.getElementsByClassName('rxmask');
   for (let i = 0; i < DOMInputs.length; i++) {
     const input = DOMInputs[i];
     const parser = new Parser({}, input);

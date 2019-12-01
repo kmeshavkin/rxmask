@@ -18,7 +18,7 @@ Easy to install and use, but advanced mask package.
 * [Example](#Example)
 * [Installation](#Installation)
   1. [Use it in script tag](#Installation/ScriptTag)
-  2. [Use it for existing `input` object (`<HTMLTextAreaElement>` type)](#Installation/Input)
+  2. [Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#Installation/Input)
   3. [Use it to parse raw string value](#Installation/RawString)
   * [Options](#Installation/Options)
 * [Notes](#Notes)
@@ -52,10 +52,10 @@ You can also use unminified `rxmask.js` file, though it's recommended to use min
 <script type="module" src="../src/rxmask.js"></script>
 ```
 
-### <a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` type)
+### <a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)
 * `npm i rxmask`
 * Import `Parser` class (it has default export).
-* Create instance of `Parser` class and provide it with options alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from <HTMLTextAreaElement> type).
+* Create instance of `Parser` class and provide it with options alongside with `input` object itself (it should accept basic, React or any other input as long as it's derived from `<HTMLTextAreaElement>` or `<HTMLInputElement>` type).
 * Add `parser.onInput` method to event of your input that is triggered on every input change.
 
 Example:
