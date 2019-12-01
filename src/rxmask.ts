@@ -38,12 +38,11 @@ export default class Parser {
   private _actualCursorPos: number = 0;
   private _finalCursorPos: number = 0;
 
-  constructor(options: InputOptions = {}, input: HTMLTextAreaElement | HTMLInputElement | null | undefined) {
+  constructor(options: InputOptions = {}, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined) {
     this.input = input;
+    this.setOptions(options);
     if (this.input) {
       this.onInput();
-    } else {
-      this.setOptions(options);
     }
   }
 
@@ -109,8 +108,6 @@ export default class Parser {
    * according to changes introduced by this.parseMask()
    */
   onInput() {
-    // Assign params every time in case it changes on the fly
-    this.setOptions({});
     // Everything is parsed, set output and cursorPos
     if (this.input) {
       this.input.value = this.output;

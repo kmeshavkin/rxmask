@@ -16,11 +16,9 @@ export default class Parser {
         this._actualCursorPos = 0;
         this._finalCursorPos = 0;
         this.input = input;
+        this.setOptions(options);
         if (this.input) {
             this.onInput();
-        }
-        else {
-            this.setOptions(options);
         }
     }
     get output() {
@@ -80,8 +78,6 @@ export default class Parser {
      * according to changes introduced by this.parseMask()
      */
     onInput() {
-        // Assign params every time in case it changes on the fly
-        this.setOptions({});
         // Everything is parsed, set output and cursorPos
         if (this.input) {
             this.input.value = this.output;

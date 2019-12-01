@@ -26,9 +26,9 @@ export default class Parser {
     private _isRemovingSymbols;
     private _actualCursorPos;
     private _finalCursorPos;
-    constructor(options: InputOptions | undefined, input: HTMLTextAreaElement | HTMLInputElement | null | undefined);
-    readonly output: string;
-    readonly finalCursorPos: number;
+    constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined);
+    get output(): string;
+    get finalCursorPos(): number;
     /**
      * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
      * @param {InputOptions} options Options to set
