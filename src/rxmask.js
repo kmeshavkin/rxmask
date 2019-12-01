@@ -32,16 +32,17 @@ export default class Parser {
      */
     setOptions({ mask, placeholderSymbol, rxmask, allowedCharacters, showMask, trailing, value, cursorPos }) {
         if (this.input) {
-            mask = this.parseNull(this.input.getAttribute('mask'));
-            placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol'));
-            rxmask = this.parseNull(this.input.getAttribute('rxmask'));
-            allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters'));
+            mask = this.parseNull(this.input.getAttribute('mask')) || mask;
+            placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol')) || placeholderSymbol;
+            rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
+            allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
             showMask =
-                this.input.getAttribute('showMask') === 'true' ? Infinity : Number(this.input.getAttribute('showMask'));
+                (this.input.getAttribute('showMask') === 'true' ? Infinity : Number(this.input.getAttribute('showMask'))) ||
+                    showMask;
             if (this.input.getAttribute('trailing') !== null)
                 trailing = this.input.getAttribute('trailing') === 'true';
             value = this.parseNull(this.input.value);
-            cursorPos = this.input.selectionStart;
+            cursorPos = this.parseNull(this.input.selectionStart);
         }
         if (mask !== undefined)
             this.options.mask = mask;
@@ -206,7 +207,7 @@ export default class Parser {
         return (str || '').match(/(\[.*?\])|(.)/g) || [];
     }
     /**
-     * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement
+     * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement or HTMLInputElement
      * @param {any} val Value from input object
      * @return {undefined | any} val or undefined if val is null
      */

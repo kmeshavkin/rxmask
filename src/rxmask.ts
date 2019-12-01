@@ -76,7 +76,7 @@ export default class Parser {
         showMask;
       if (this.input.getAttribute('trailing') !== null) trailing = this.input.getAttribute('trailing') === 'true';
       value = this.parseNull(this.input.value);
-      cursorPos = this.input.selectionStart;
+      cursorPos = this.parseNull(this.input.selectionStart);
     }
 
     if (mask !== undefined) this.options.mask = mask;

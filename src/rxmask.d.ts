@@ -20,13 +20,13 @@ interface Options {
 }
 export default class Parser {
     options: Options;
-    input: HTMLTextAreaElement | undefined;
+    input: HTMLTextAreaElement | HTMLInputElement | undefined;
     private _output;
     private _prevValue;
     private _isRemovingSymbols;
     private _actualCursorPos;
     private _finalCursorPos;
-    constructor(options?: InputOptions, input?: HTMLTextAreaElement);
+    constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement);
     readonly output: string;
     readonly finalCursorPos: number;
     /**
@@ -54,7 +54,7 @@ export default class Parser {
      */
     private strToRxmask;
     /**
-     * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement
+     * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement or HTMLInputElement
      * @param {any} val Value from input object
      * @return {undefined | any} val or undefined if val is null
      */
