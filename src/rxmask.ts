@@ -41,6 +41,7 @@ export default class Parser {
   constructor(options: InputOptions = {}, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined) {
     this.input = input;
     this.setOptions(options);
+    this.parseMask();
     if (this.input) {
       this.onInput();
     }
@@ -97,9 +98,6 @@ export default class Parser {
         return char;
       });
     }
-
-    // Now recalculate all values
-    this.parseMask();
   }
 
   /**
@@ -108,6 +106,10 @@ export default class Parser {
    * according to changes introduced by this.parseMask()
    */
   onInput() {
+    // Set options - in that case it will take all possible options from input element
+    this.setOptions({});
+    // Parse values
+    this.parseMask();
     // Everything is parsed, set output and cursorPos
     if (this.input) {
       this.input.value = this.output;

@@ -17,6 +17,7 @@ export default class Parser {
         this._finalCursorPos = 0;
         this.input = input;
         this.setOptions(options);
+        this.parseMask();
         if (this.input) {
             this.onInput();
         }
@@ -69,8 +70,6 @@ export default class Parser {
                 return char;
             });
         }
-        // Now recalculate all values
-        this.parseMask();
     }
     /**
      * If this method is called, it will cause options update (with this.input values), call of this.parseMask()
@@ -78,6 +77,10 @@ export default class Parser {
      * according to changes introduced by this.parseMask()
      */
     onInput() {
+        // Set options - in that case it will take all possible options from input element
+        this.setOptions({});
+        // Parse values
+        this.parseMask();
         // Everything is parsed, set output and cursorPos
         if (this.input) {
             this.input.value = this.output;
