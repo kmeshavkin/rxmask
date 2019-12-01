@@ -38,10 +38,13 @@ export default class Parser {
   private _actualCursorPos: number = 0;
   private _finalCursorPos: number = 0;
 
-  constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement) {
+  constructor(options: InputOptions = {}, input?: HTMLTextAreaElement | HTMLInputElement) {
     this.input = input;
-    this.setOptions(options || {});
-    if (this.input) this.onInput();
+    if (this.input) {
+      this.onInput();
+    } else {
+      this.setOptions(options);
+    }
   }
 
   get output() {
@@ -95,6 +98,9 @@ export default class Parser {
         return char;
       });
     }
+
+    // Now recalculate all values
+    this.parseMask();
   }
 
   /**
@@ -105,8 +111,6 @@ export default class Parser {
   onInput() {
     // Assign params every time in case it changes on the fly
     this.setOptions({});
-    // Call parser
-    this.parseMask();
     // Everything is parsed, set output and cursorPos
     if (this.input) {
       this.input.value = this.output;

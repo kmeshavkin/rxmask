@@ -1,5 +1,5 @@
 export default class Parser {
-    constructor(options, input) {
+    constructor(options = {}, input) {
         this.options = {
             mask: '',
             placeholderSymbol: '*',
@@ -16,9 +16,12 @@ export default class Parser {
         this._actualCursorPos = 0;
         this._finalCursorPos = 0;
         this.input = input;
-        this.setOptions(options || {});
-        if (this.input)
+        if (this.input) {
             this.onInput();
+        }
+        else {
+            this.setOptions(options);
+        }
     }
     get output() {
         return this._output;
@@ -68,6 +71,8 @@ export default class Parser {
                 return char;
             });
         }
+        // Now recalculate all values
+        this.parseMask();
     }
     /**
      * If this method is called, it will cause options update (with this.input values), call of this.parseMask()
@@ -77,8 +82,6 @@ export default class Parser {
     onInput() {
         // Assign params every time in case it changes on the fly
         this.setOptions({});
-        // Call parser
-        this.parseMask();
         // Everything is parsed, set output and cursorPos
         if (this.input) {
             this.input.value = this.output;
