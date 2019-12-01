@@ -20,13 +20,13 @@ interface Options {
 }
 export default class Parser {
     options: Options;
-    input: HTMLTextAreaElement | HTMLInputElement | undefined;
+    input: HTMLTextAreaElement | HTMLInputElement | null | undefined;
     private _output;
     private _prevValue;
     private _isRemovingSymbols;
     private _actualCursorPos;
     private _finalCursorPos;
-    constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement);
+    constructor(options: InputOptions | undefined, input: HTMLTextAreaElement | HTMLInputElement | null | undefined);
     readonly output: string;
     readonly finalCursorPos: number;
     /**

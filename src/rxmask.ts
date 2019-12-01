@@ -31,14 +31,14 @@ export default class Parser {
     showMask: 0,
     trailing: true
   };
-  input: HTMLTextAreaElement | HTMLInputElement | undefined;
+  input: HTMLTextAreaElement | HTMLInputElement | null | undefined;
   private _output: string = '';
   private _prevValue: string = '';
   private _isRemovingSymbols: boolean = false;
   private _actualCursorPos: number = 0;
   private _finalCursorPos: number = 0;
 
-  constructor(options: InputOptions = {}, input?: HTMLTextAreaElement | HTMLInputElement) {
+  constructor(options: InputOptions = {}, input: HTMLTextAreaElement | HTMLInputElement | null | undefined) {
     this.input = input;
     if (this.input) {
       this.onInput();
