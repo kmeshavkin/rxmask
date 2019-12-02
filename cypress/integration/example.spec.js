@@ -482,11 +482,11 @@ describe('Input with partial showMask and allowed mask symbols', () => {
 
 describe('Input with partial showMask, allowed mask symbols and trailing is disabled', () => {
   afterEach(() => {
-    cy.get('input.showMaskPartTrailing').clear();
+    cy.get('input.showMaskPartNoTrailing').clear();
   });
 
   it('should correctly apply mask for typed characters', () => {
-    cy.get('input.showMaskPartTrailing')
+    cy.get('input.showMaskPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a')
       .should('have.value', ' a [___]')
@@ -506,7 +506,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 
   it('should correctly apply mask for deleted characters', () => {
-    cy.get('input.showMaskPartTrailing')
+    cy.get('input.showMaskPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a123$% []')
       .should('have.value', ' a [123] [$% ] [[]]')
@@ -538,7 +538,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 
   it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskPartTrailing')
+    cy.get('input.showMaskPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a12')
       .should('have.value', ' a [12_]')
@@ -555,7 +555,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 
   it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskPartTrailing')
+    cy.get('input.showMaskPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a123$% []')
       .should('have.value', ' a [123] [$% ] [[]]')
