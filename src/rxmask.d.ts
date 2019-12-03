@@ -30,10 +30,14 @@ export default class Parser {
     get output(): string;
     get finalCursorPos(): number;
     /**
-     * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
+     * Takes options from provided option values
      * @param {InputOptions} options Options to set
      */
     setOptions({ mask, placeholderSymbol, rxmask, allowedCharacters, showMask, trailing, value, cursorPos }: InputOptions): void;
+    /**
+     * Takes options from provided input value (if present), otherwise sets previous values
+     */
+    private parseOptionsFromInput;
     /**
      * If this method is called, it will cause options update (with this.input values), call of this.parseMask()
      * and update of new value of this.input (this.input.value) and cursor position (this.input.setSelectionRange)

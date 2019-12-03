@@ -41,9 +41,10 @@ export default class Parser {
   constructor(options: InputOptions = {}, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined) {
     this.input = input;
     this.setOptions(options);
-    this.parseMask();
     if (this.input) {
       this.onInput();
+    } else {
+      this.parseMask();
     }
   }
 
@@ -56,7 +57,7 @@ export default class Parser {
   }
 
   /**
-   * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
+   * Takes options from provided option values
    * @param {InputOptions} options Options to set
    */
   setOptions({
@@ -66,28 +67,17 @@ export default class Parser {
     allowedCharacters = '.',
     showMask = '0',
     trailing = 'true',
-    value,
-    cursorPos
+    value = '',
+    cursorPos = -1
   }: InputOptions) {
-    if (this.input) {
-      mask = this.parseNull(this.input.getAttribute('mask')) || mask;
-      placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol')) || placeholderSymbol;
-      rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
-      allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
-      showMask = this.input.getAttribute('showMask') || showMask;
-      trailing = this.parseNull(this.input.getAttribute('trailing')) || trailing;
-      value = this.parseNull(this.input.value);
-      cursorPos = this.parseNull(this.input.selectionStart);
-    }
-
-    if (mask !== undefined) this.options.mask = mask;
-    if (placeholderSymbol !== undefined) this.options.placeholderSymbol = placeholderSymbol;
-    if (rxmask !== undefined) this.options.rxmask = this.strToRxmask(rxmask);
-    if (allowedCharacters !== undefined) this.options.allowedCharacters = allowedCharacters;
-    if (showMask !== undefined) this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
-    if (trailing !== undefined) this.options.trailing = trailing === 'true';
-    if (value !== undefined) this.options.value = value;
-    if (cursorPos !== undefined) this.options.cursorPos = cursorPos;
+    this.options.mask = mask;
+    this.options.placeholderSymbol = placeholderSymbol;
+    this.options.rxmask = this.strToRxmask(rxmask);
+    this.options.allowedCharacters = allowedCharacters;
+    this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
+    this.options.trailing = trailing === 'true';
+    this.options.value = value;
+    this.options.cursorPos = cursorPos;
 
     // Parse rxmask in the end
     if (this.options.rxmask.length === 0) {
@@ -99,13 +89,47 @@ export default class Parser {
   }
 
   /**
+   * Takes options from provided input value (if present), otherwise sets previous values
+   */
+  private parseOptionsFromInput() {
+    if (this.input) {
+      this.options.mask = this.parseNull(this.input.getAttribute('mask')) || this.options.mask;
+      this.options.placeholderSymbol =
+        this.parseNull(this.input.getAttribute('placeholderSymbol')) || this.options.placeholderSymbol;
+      this.options.rxmask = this.parseNull(this.input.getAttribute('rxmask')) || this.options.rxmask;
+      this.options.allowedCharacters =
+        this.parseNull(this.input.getAttribute('allowedCharacters')) || this.options.allowedCharacters;
+      this.options.showMask =
+        this.input.getAttribute('showMask') !== null
+          ? this.input.getAttribute('showMask') === 'true'
+            ? Infinity
+            : Number(this.input.getAttribute('showMask'))
+          : this.options.showMask;
+      this.options.trailing =
+        this.input.getAttribute('trailing') !== null
+          ? this.input.getAttribute('trailing') === 'true'
+          : this.options.trailing;
+      this.options.value = this.parseNull(this.input.value);
+      this.options.cursorPos = this.parseNull(this.input.selectionStart);
+
+      // Parse rxmask in the end
+      if (this.options.rxmask.length === 0) {
+        this.options.rxmask = this.options.mask.split('').map(char => {
+          if (char === this.options.placeholderSymbol) return '[^]';
+          return char;
+        });
+      }
+    }
+  }
+
+  /**
    * If this method is called, it will cause options update (with this.input values), call of this.parseMask()
    * and update of new value of this.input (this.input.value) and cursor position (this.input.setSelectionRange)
    * according to changes introduced by this.parseMask()
    */
   onInput() {
     // Set options - in that case it will take all possible options from input element
-    this.setOptions({});
+    this.parseOptionsFromInput();
     // Parse values
     this.parseMask();
     // Everything is parsed, set output and cursorPos
