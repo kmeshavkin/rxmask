@@ -38,9 +38,7 @@ export default class Parser {
             placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol')) || placeholderSymbol;
             rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
             allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
-            showMask =
-                (this.input.getAttribute('showMask') === 'true' ? Infinity : Number(this.input.getAttribute('showMask'))) ||
-                    showMask;
+            showMask = this.input.getAttribute('showMask') || showMask;
             if (this.input.getAttribute('trailing') !== null)
                 trailing = this.input.getAttribute('trailing') === 'true';
             value = this.parseNull(this.input.value);
@@ -55,7 +53,7 @@ export default class Parser {
         if (allowedCharacters !== undefined)
             this.options.allowedCharacters = allowedCharacters;
         if (showMask !== undefined)
-            this.options.showMask = showMask;
+            this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
         if (trailing !== undefined)
             this.options.trailing = trailing;
         if (value !== undefined)

@@ -5,7 +5,7 @@ interface InputOptions {
   value?: string;
   cursorPos?: number;
   allowedCharacters?: string;
-  showMask?: number;
+  showMask?: string;
   trailing?: boolean;
 }
 
@@ -74,9 +74,7 @@ export default class Parser {
       placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol')) || placeholderSymbol;
       rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
       allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
-      showMask =
-        (this.input.getAttribute('showMask') === 'true' ? Infinity : Number(this.input.getAttribute('showMask'))) ||
-        showMask;
+      showMask = this.input.getAttribute('showMask') || showMask;
       if (this.input.getAttribute('trailing') !== null) trailing = this.input.getAttribute('trailing') === 'true';
       value = this.parseNull(this.input.value);
       cursorPos = this.parseNull(this.input.selectionStart);
@@ -86,7 +84,7 @@ export default class Parser {
     if (placeholderSymbol !== undefined) this.options.placeholderSymbol = placeholderSymbol;
     if (rxmask !== undefined) this.options.rxmask = this.strToRxmask(rxmask);
     if (allowedCharacters !== undefined) this.options.allowedCharacters = allowedCharacters;
-    if (showMask !== undefined) this.options.showMask = showMask;
+    if (showMask !== undefined) this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
     if (trailing !== undefined) this.options.trailing = trailing;
     if (value !== undefined) this.options.value = value;
     if (cursorPos !== undefined) this.options.cursorPos = cursorPos;

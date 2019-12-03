@@ -5,7 +5,7 @@ interface InputOptions {
     value?: string;
     cursorPos?: number;
     allowedCharacters?: string;
-    showMask?: number;
+    showMask?: string;
     trailing?: boolean;
 }
 interface Options {
