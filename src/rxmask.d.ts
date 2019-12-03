@@ -1,4 +1,4 @@
-interface InputOptions {
+export interface InputOptions {
     mask?: string;
     placeholderSymbol?: string;
     rxmask?: string;
@@ -8,7 +8,7 @@ interface InputOptions {
     showMask?: string;
     trailing?: boolean;
 }
-interface Options {
+export interface Options {
     mask: string;
     placeholderSymbol: string;
     rxmask: string[];
@@ -27,8 +27,8 @@ export default class Parser {
     private _actualCursorPos;
     private _finalCursorPos;
     constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined);
-    get output(): string;
-    get finalCursorPos(): number;
+    readonly output: string;
+    readonly finalCursorPos: number;
     /**
      * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
      * @param {InputOptions} options Options to set
@@ -60,4 +60,3 @@ export default class Parser {
      */
     private parseNull;
 }
-export {};

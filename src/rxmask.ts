@@ -1,4 +1,4 @@
-interface InputOptions {
+export interface InputOptions {
   mask?: string;
   placeholderSymbol?: string;
   rxmask?: string;
@@ -9,7 +9,7 @@ interface InputOptions {
   trailing?: boolean;
 }
 
-interface Options {
+export interface Options {
   mask: string;
   placeholderSymbol: string;
   rxmask: string[];
