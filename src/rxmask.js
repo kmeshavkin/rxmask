@@ -32,15 +32,14 @@ export default class Parser {
      * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
      * @param {InputOptions} options Options to set
      */
-    setOptions({ mask, placeholderSymbol, rxmask, allowedCharacters, showMask, trailing, value, cursorPos }) {
+    setOptions({ mask = '', placeholderSymbol = '*', rxmask = '', allowedCharacters = '.', showMask = '0', trailing = 'true', value, cursorPos }) {
         if (this.input) {
             mask = this.parseNull(this.input.getAttribute('mask')) || mask;
             placeholderSymbol = this.parseNull(this.input.getAttribute('placeholderSymbol')) || placeholderSymbol;
             rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
             allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
             showMask = this.input.getAttribute('showMask') || showMask;
-            if (this.input.getAttribute('trailing') !== null)
-                trailing = this.input.getAttribute('trailing') === 'true';
+            trailing = this.parseNull(this.input.getAttribute('trailing')) || trailing;
             value = this.parseNull(this.input.value);
             cursorPos = this.parseNull(this.input.selectionStart);
         }
@@ -55,7 +54,7 @@ export default class Parser {
         if (showMask !== undefined)
             this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
         if (trailing !== undefined)
-            this.options.trailing = trailing;
+            this.options.trailing = trailing === 'true';
         if (value !== undefined)
             this.options.value = value;
         if (cursorPos !== undefined)

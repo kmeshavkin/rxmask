@@ -6,7 +6,7 @@ export interface InputOptions {
     cursorPos?: number;
     allowedCharacters?: string;
     showMask?: string;
-    trailing?: boolean;
+    trailing?: string;
 }
 export interface Options {
     mask: string;
@@ -27,8 +27,8 @@ export default class Parser {
     private _actualCursorPos;
     private _finalCursorPos;
     constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined);
-    readonly output: string;
-    readonly finalCursorPos: number;
+    get output(): string;
+    get finalCursorPos(): number;
     /**
      * Takes options from input (if present) or from provided values, if input and provided value are undefined, do not change value
      * @param {InputOptions} options Options to set

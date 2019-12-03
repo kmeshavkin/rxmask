@@ -6,7 +6,7 @@ export interface InputOptions {
   cursorPos?: number;
   allowedCharacters?: string;
   showMask?: string;
-  trailing?: boolean;
+  trailing?: string;
 }
 
 export interface Options {
@@ -60,12 +60,12 @@ export default class Parser {
    * @param {InputOptions} options Options to set
    */
   setOptions({
-    mask,
-    placeholderSymbol,
-    rxmask,
-    allowedCharacters,
-    showMask,
-    trailing,
+    mask = '',
+    placeholderSymbol = '*',
+    rxmask = '',
+    allowedCharacters = '.',
+    showMask = '0',
+    trailing = 'true',
     value,
     cursorPos
   }: InputOptions) {
@@ -75,7 +75,7 @@ export default class Parser {
       rxmask = this.parseNull(this.input.getAttribute('rxmask')) || rxmask;
       allowedCharacters = this.parseNull(this.input.getAttribute('allowedCharacters')) || allowedCharacters;
       showMask = this.input.getAttribute('showMask') || showMask;
-      if (this.input.getAttribute('trailing') !== null) trailing = this.input.getAttribute('trailing') === 'true';
+      trailing = this.parseNull(this.input.getAttribute('trailing')) || trailing;
       value = this.parseNull(this.input.value);
       cursorPos = this.parseNull(this.input.selectionStart);
     }
@@ -85,7 +85,7 @@ export default class Parser {
     if (rxmask !== undefined) this.options.rxmask = this.strToRxmask(rxmask);
     if (allowedCharacters !== undefined) this.options.allowedCharacters = allowedCharacters;
     if (showMask !== undefined) this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
-    if (trailing !== undefined) this.options.trailing = trailing;
+    if (trailing !== undefined) this.options.trailing = trailing === 'true';
     if (value !== undefined) this.options.value = value;
     if (cursorPos !== undefined) this.options.cursorPos = cursorPos;
 
