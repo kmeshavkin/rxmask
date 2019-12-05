@@ -1,9 +1,5 @@
 ## TODO
 
-### Overall
-
-- Better README (GIF at the top, something like plates with browser support, etc.)
-
 ### Tests
 
 - Add more tests for other inputs similar to simple input
