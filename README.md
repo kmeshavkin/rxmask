@@ -1,14 +1,14 @@
 # rxmask.js
 
+![minzipped size](https://img.shields.io/bundlephobia/minzip/rxmask)
+![downloads/month](https://img.shields.io/npm/dm/rxmask)
+![type definitions](https://img.shields.io/npm/types/rxmask)
+
 Easy to install and use advanced mask package.
 
 ![Demo](https://i.imgur.com/JQkbS8p.gif)
 
 Playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin.github.io/rxmask-playground/).
-
-![minzipped size](https://img.shields.io/bundlephobia/minzip/rxmask)
-![downloads/month](https://img.shields.io/npm/dm/rxmask)
-![type definitions](https://img.shields.io/npm/types/rxmask)
 
 ## <a name="Features"></a>Features
 
