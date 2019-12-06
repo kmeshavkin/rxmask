@@ -60,7 +60,7 @@ export default class Parser {
             this.options.mask = this.parseNull(this.input.getAttribute('mask')) || this.options.mask;
             this.options.placeholderSymbol =
                 this.parseNull(this.input.getAttribute('placeholderSymbol')) || this.options.placeholderSymbol;
-            this.options.rxmask = this.parseNull(this.input.getAttribute('rxmask')) || this.options.rxmask;
+            this.options.rxmask = this.strToRxmask(this.parseNull(this.input.getAttribute('rxmask'))) || this.options.rxmask;
             this.options.allowedCharacters =
                 this.parseNull(this.input.getAttribute('allowedCharacters')) || this.options.allowedCharacters;
             this.options.showMask =
@@ -119,18 +119,25 @@ export default class Parser {
         // Get length diff between old and current value
         const diff = value.length - this._prevValue.length;
         this._isRemovingSymbols = diff >= 0 ? false : true;
+        let parsedAllowedCharacters = /./;
+        try {
+            parsedAllowedCharacters = new RegExp(allowedCharacters);
+        }
+        catch (error) {
+            console.error('Wrong regex for allowedCharacters!');
+        }
         // Get value after cursor without mask symbols
         let afterCursor = '';
         for (let i = cursorPos; i < value.length; i++) {
             // Diff used here to "shift" mask to position where it supposed to be
-            if (value[i] !== rxmask[i - diff] && value[i] !== placeholderSymbol && value[i].match(allowedCharacters)) {
+            if (value[i] !== rxmask[i - diff] && value[i] !== placeholderSymbol && value[i].match(parsedAllowedCharacters)) {
                 afterCursor += value[i];
             }
         }
         // Get value before cursor without mask symbols
         let beforeCursor = '';
         for (let i = 0; i < cursorPos; i++) {
-            if (value[i] !== rxmask[i] && value[i] !== placeholderSymbol && value[i].match(allowedCharacters)) {
+            if (value[i] !== rxmask[i] && value[i] !== placeholderSymbol && value[i].match(parsedAllowedCharacters)) {
                 // If parsed value length before cursor so far less than
                 // amount of allowed symbols in rxmask minus parsed value length after cursor, add symbol
                 if (beforeCursor.length < rxmask.filter(pattern => pattern.match(/\[.*\]/)).length - afterCursor.length)
@@ -146,7 +153,14 @@ export default class Parser {
         const filteredRxmask = rxmask.filter(pattern => pattern.match(/\[.*\]/));
         let i = 0;
         while (noMaskValue.length > 0 && i < noMaskValue.length) {
-            if (noMaskValue[i].match(new RegExp(filteredRxmask[i]))) {
+            let regexChar = /./;
+            try {
+                regexChar = new RegExp(filteredRxmask[i]);
+            }
+            catch (error) {
+                console.error('Wrong regex for rxmask!');
+            }
+            if (noMaskValue[i].match(regexChar)) {
                 parsedValue += noMaskValue[i];
                 i++;
             }
