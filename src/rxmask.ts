@@ -96,7 +96,9 @@ export default class Parser {
       this.options.mask = this.parseNull(this.input.getAttribute('mask')) || this.options.mask;
       this.options.placeholderSymbol =
         this.parseNull(this.input.getAttribute('placeholderSymbol')) || this.options.placeholderSymbol;
-      this.options.rxmask = this.strToRxmask(this.parseNull(this.input.getAttribute('rxmask'))) || this.options.rxmask;
+      this.options.rxmask = this.parseNull(this.input.getAttribute('rxmask'))
+        ? this.strToRxmask(this.input.getAttribute('rxmask'))
+        : this.options.rxmask;
       this.options.allowedCharacters =
         this.parseNull(this.input.getAttribute('allowedCharacters')) || this.options.allowedCharacters;
       this.options.showMask =
