@@ -19,6 +19,8 @@ Playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin
 - Robust (test coverage with Cypress)
 - No dependencies
 
+If you want to check my other works, you can visit my portfolio: [https://kmeshavkin.github.io/](https://kmeshavkin.github.io/)
+
 ## Table of contents
 
 - [Features](#Features)
