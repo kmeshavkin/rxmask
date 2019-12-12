@@ -154,7 +154,13 @@ export default class Parser {
   // Idea here is to parse everything before cursor position as is,
   // but parse everything after cursor as if it was shifted by inserting some symbols on cursor position.
   // This method is trying to remove mask symbols, but it still leaves symbols that are not allowed
-  // TODO: Add example
+  // Example ("|" is a cursor position):
+  // Mask is ***-**-** and value before input is 123-4|5-6, then user enters 7, so input is initially (before parsing) is 123-47|5-6
+  // 123-47 parsed as-is (without shift or diff), so output for beforeCursor is 12347
+  // Position of 5-6 is correlates to -** (or, with beforeCursor part ...-..5-6 is correlates to ***-**-**) for mask,
+  // so if it will be parsed without shift, it will result in wrong value (-6)
+  // Because of that this value is shifted back for one symbol (for as much symbols as were entered or deleted by user) for mask,
+  // so 5-6 is now correlates to *-* (or, with beforeCursor part ...-.5-6. is correlates to ***-**-**). Now afterCursor is parsed correctly as 56.
   private parseOutMask() {
     const { value, cursorPos, rxmask, placeholderSymbol, allowedCharacters } = this.options;
     // Get length diff between old and current value

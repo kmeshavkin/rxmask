@@ -27,8 +27,8 @@ export default class Parser {
     private _actualCursorPos;
     private _finalCursorPos;
     constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined);
-    get output(): string;
-    get finalCursorPos(): number;
+    readonly output: string;
+    readonly finalCursorPos: number;
     /**
      * Takes options from provided option values
      * @param {InputOptions} options Options to set
