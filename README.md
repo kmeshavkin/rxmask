@@ -23,15 +23,17 @@ If you want to check my other works, you can visit my portfolio: [https://kmesha
 
 ## Table of contents
 
-- [Features](#Features)
-- [Example](#Example)
-- [Installation](#Installation)
-  1. [Use it in script tag](#Installation/ScriptTag)
-  2. [Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#Installation/Input)
-  3. [Use it to parse raw string value](#Installation/RawString)
-  - [Options](#Installation/Options)
-- [Notes](#Notes)
-- [Testing](#Testing)
+- [rxmask.js](#rxmaskjs)
+  - [Features](#features)
+  - [Table of contents](#table-of-contents)
+  - [Example](#example)
+  - [Installation](#installation)
+    1. [Use it in script tag](#use-it-in-script-tag)
+    2. [Use it for existing `input` object (`HTMLTextAreaElement` or `HTMLInputElement` type)](#use-it-for-existing-input-object-lthtmltextareaelementgt-or-lthtmlinputelementgt-type)
+    3. [Use it to parse raw string value](#use-it-to-parse-raw-string-value)
+    - [Options](#options)
+  - [Notes](#notes)
+  - [Testing](#testing)
 
 ## <a name="Example"></a>Example
 
@@ -107,13 +109,13 @@ Note that under the hood class stores previous value, so if you want to just par
 
 ### <a name="Installation/Options"></a>Options
 
-These options can be provided both to `Parser` class itself (through options or property assignment) and as `<input>` tag properties:
+These options can be provided both to `Parser` class itself (through options or property assignment) and as `<input>` tag properties (note that if you are using options in `<input>` tag, you should add `data-` before any option, like `data-maxMaskLength`):
 
 - `mask` - mask, should include `placeholderSymbol`, otherwise user will not be able to type any characters.
 - `rxmask` - regex mask (if `rxmask` is present, `mask` will be ignored), characters in square brackets will be parsed as characters for user input, any other character will be parsed as mask symbol.
 - `placeholderSymbol` - symbol, that specifies character that will be replaced in mask with user input.
 - `allowedCharacters` - characters allowed to be used in this input. If this option is present, all other characters will be ignored when user types them.
-- `showMask` - show whole mask, part of it or not show it at all (can be any `number`, but you can also provide `true` if you use `onInput` function or script tag).
+- `maxMaskLength` - show whole mask, part of it or not show it at all (can be any `number` including `Infinity` to show whole mask).
 - `trailing` - if trailing is `true`, show trailing mask symbols. Example: if with mask `***--**-**` user types `123`, user will get `123--`, but if he removes symbol `4` from `123--4`, he will get just `123` without `-`. If trailing is disabled, regardless of user actions value `123` will always result in just `123`.
 
 These are class only options:

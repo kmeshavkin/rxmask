@@ -7,7 +7,7 @@ export default class Parser {
             value: '',
             cursorPos: 0,
             allowedCharacters: '.',
-            showMask: 0,
+            maxMaskLength: 0,
             trailing: true
         };
         this._output = '';
@@ -34,12 +34,12 @@ export default class Parser {
      * Takes options from provided option values
      * @param {InputOptions} options Options to set
      */
-    setOptions({ mask = '', placeholderSymbol = '*', rxmask = '', allowedCharacters = '.', showMask = '0', trailing = 'true', value = '', cursorPos = -1 }) {
+    setOptions({ mask = '', placeholderSymbol = '*', rxmask = '', allowedCharacters = '.', maxMaskLength = '0', trailing = 'true', value = '', cursorPos = -1 }) {
         this.options.mask = mask;
         this.options.placeholderSymbol = placeholderSymbol;
         this.options.rxmask = this.strToRxmask(rxmask);
         this.options.allowedCharacters = allowedCharacters;
-        this.options.showMask = showMask === 'true' ? Infinity : Number(showMask);
+        this.options.maxMaskLength = Number(maxMaskLength);
         this.options.trailing = trailing === 'true';
         this.options.value = value;
         this.options.cursorPos = cursorPos;
@@ -57,26 +57,16 @@ export default class Parser {
      */
     parseOptionsFromInput() {
         if (this.input) {
-            this.options.mask = this.parseNull(this.input.getAttribute('mask')) || this.options.mask;
-            this.options.placeholderSymbol =
-                this.parseNull(this.input.getAttribute('placeholderSymbol')) || this.options.placeholderSymbol;
-            this.options.rxmask = this.parseNull(this.input.getAttribute('rxmask'))
-                ? this.strToRxmask(this.input.getAttribute('rxmask'))
-                : this.options.rxmask;
-            this.options.allowedCharacters =
-                this.parseNull(this.input.getAttribute('allowedCharacters')) || this.options.allowedCharacters;
-            this.options.showMask =
-                this.input.getAttribute('showMask') !== null
-                    ? this.input.getAttribute('showMask') === 'true'
-                        ? Infinity
-                        : Number(this.input.getAttribute('showMask'))
-                    : this.options.showMask;
-            this.options.trailing =
-                this.input.getAttribute('trailing') !== null
-                    ? this.input.getAttribute('trailing') === 'true'
-                    : this.options.trailing;
-            this.options.value = this.parseNull(this.input.value);
-            this.options.cursorPos = this.parseNull(this.input.selectionStart);
+            const data = this.input.dataset;
+            this.options.mask = data.mask || this.options.mask;
+            this.options.placeholderSymbol = data.placeholdersymbol || this.options.placeholderSymbol;
+            this.options.rxmask = data.rxmask ? this.strToRxmask(data.rxmask) : this.options.rxmask;
+            this.options.allowedCharacters = data.allowedcharacters || this.options.allowedCharacters;
+            this.options.maxMaskLength =
+                data.maxmasklength !== undefined ? Number(data.maxmasklength) : this.options.maxMaskLength;
+            this.options.trailing = data.trailing !== undefined ? data.trailing === 'true' : this.options.trailing;
+            this.options.value = this.input.value;
+            this.options.cursorPos = this.input.selectionStart || 0;
             // Parse rxmask in the end
             if (this.options.rxmask.length === 0) {
                 this.options.rxmask = this.options.mask.split('').map(char => {
@@ -182,7 +172,7 @@ export default class Parser {
         return parsedValue;
     }
     getOutput([...parsedValue]) {
-        const { rxmask, showMask, placeholderSymbol, trailing } = this.options;
+        const { rxmask, maxMaskLength, placeholderSymbol, trailing } = this.options;
         this._finalCursorPos = 0; // Reset value
         let output = '';
         const parsedValueEmpty = parsedValue.length === 0;
@@ -194,7 +184,7 @@ export default class Parser {
                 if (parsedValue.length > 0) {
                     output += parsedValue.shift();
                 }
-                else if (showMask > i) {
+                else if (maxMaskLength > i) {
                     output += placeholderSymbol;
                     encounteredPlaceholder = true;
                 }
@@ -208,8 +198,8 @@ export default class Parser {
             else {
                 // Add mask symbol if
                 if (
-                // mask is not fully shown according to this.showMask
-                showMask > i ||
+                // mask is not fully shown according to this.maxMaskLength
+                maxMaskLength > i ||
                     // OR there's some parsed characters left to add
                     parsedValue.length > 0 ||
                     // OR this mask symbol is following parsedValue character AND user just added symbols (not removed)
@@ -224,7 +214,7 @@ export default class Parser {
                 if (
                 // no placeholder was encountered AND parsedValue is empty AND this mask symbol should be shown
                 // (this ensures that cursor position will be always set just before first placeholder if parsedValue is empty)
-                (!encounteredPlaceholder && parsedValueEmpty && showMask > i) ||
+                (!encounteredPlaceholder && parsedValueEmpty && maxMaskLength > i) ||
                     // OR according to _actualCursorPos not all characters from parsedValue before cursorPos were added yet
                     this._actualCursorPos > 0 ||
                     // OR all characters from parsedValue before cursorPos were added AND no placeholders yet (or _actualCursorPos will be negative)
@@ -243,14 +233,6 @@ export default class Parser {
      */
     strToRxmask(str) {
         return (str || '').match(/(\[.*?\])|(.)/g) || [];
-    }
-    /**
-     * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement or HTMLInputElement
-     * @param {any} val Value from input object
-     * @return {undefined | any} val or undefined if val is null
-     */
-    parseNull(val) {
-        return val === null ? undefined : val;
     }
 }
 (function processInputs() {

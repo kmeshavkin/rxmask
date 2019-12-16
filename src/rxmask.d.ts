@@ -5,7 +5,7 @@ export interface InputOptions {
     value?: string;
     cursorPos?: number;
     allowedCharacters?: string;
-    showMask?: string;
+    maxMaskLength?: string;
     trailing?: string;
 }
 export interface Options {
@@ -15,7 +15,7 @@ export interface Options {
     value: string;
     cursorPos: number;
     allowedCharacters: string;
-    showMask: number;
+    maxMaskLength: number;
     trailing: boolean;
 }
 export default class Parser {
@@ -27,13 +27,13 @@ export default class Parser {
     private _actualCursorPos;
     private _finalCursorPos;
     constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined);
-    readonly output: string;
-    readonly finalCursorPos: number;
+    get output(): string;
+    get finalCursorPos(): number;
     /**
      * Takes options from provided option values
      * @param {InputOptions} options Options to set
      */
-    setOptions({ mask, placeholderSymbol, rxmask, allowedCharacters, showMask, trailing, value, cursorPos }: InputOptions): void;
+    setOptions({ mask, placeholderSymbol, rxmask, allowedCharacters, maxMaskLength, trailing, value, cursorPos }: InputOptions): void;
     /**
      * Takes options from provided input value (if present), otherwise sets previous values
      */
@@ -57,10 +57,4 @@ export default class Parser {
      * @return {string[]} parsed rxmask or empty array
      */
     private strToRxmask;
-    /**
-     * Checks if value is null and returns undefined only in that case. Created to correctly parse .getAttribute() from HTMLTextAreaElement or HTMLInputElement
-     * @param {any} val Value from input object
-     * @return {undefined | any} val or undefined if val is null
-     */
-    private parseNull;
 }

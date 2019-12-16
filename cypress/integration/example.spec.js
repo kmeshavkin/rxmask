@@ -168,13 +168,13 @@ describe('Simple input with values restricted to numbers', () => {
   });
 });
 
-describe('Input with showMask', () => {
+describe('Input with maxMaskLength', () => {
   afterEach(() => {
-    cy.get('input.showMask').clear();
+    cy.get('input.maxMaskLength').clear();
   });
 
   it('should correctly apply mask for typed characters', () => {
-    cy.get('input.showMask')
+    cy.get('input.maxMaskLength')
       .should('have.value', '+_ (___) ___-__-__')
       .type('123')
       .should('have.value', '+1 (23_) ___-__-__')
@@ -194,7 +194,7 @@ describe('Input with showMask', () => {
   });
 
   it('should correctly apply mask for deleted characters', () => {
-    cy.get('input.showMask')
+    cy.get('input.maxMaskLength')
       .should('have.value', '+_ (___) ___-__-__')
       .type('12345678901')
       .should('have.value', '+1 (234) 567-89-01')
@@ -226,7 +226,7 @@ describe('Input with showMask', () => {
   });
 
   it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
-    cy.get('input.showMask')
+    cy.get('input.maxMaskLength')
       .should('have.value', '+_ (___) ___-__-__')
       .type('123')
       .should('have.value', '+1 (23_) ___-__-__')
@@ -249,7 +249,7 @@ describe('Input with showMask', () => {
   });
 
   it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
-    cy.get('input.showMask')
+    cy.get('input.maxMaskLength')
       .should('have.value', '+_ (___) ___-__-__')
       .type('12345678901')
       .should('have.value', '+1 (234) 567-89-01')
@@ -275,13 +275,13 @@ describe('Input with showMask', () => {
   });
 });
 
-describe('Input with showMask and allowed mask symbols', () => {
+describe('Input with maxMaskLength and allowed mask symbols', () => {
   afterEach(() => {
-    cy.get('input.showMaskSymbols').clear();
+    cy.get('input.maxMaskLengthSymbols').clear();
   });
 
   it('should correctly apply mask for typed characters', () => {
-    cy.get('input.showMaskSymbols')
+    cy.get('input.maxMaskLengthSymbols')
       .should('have.value', '+_ (___) ___-__-__')
       .type('+ ')
       .should('have.value', '++ ( __) ___-__-__')
@@ -295,7 +295,7 @@ describe('Input with showMask and allowed mask symbols', () => {
   });
 
   it('should correctly apply mask for deleted characters', () => {
-    cy.get('input.showMaskSymbols')
+    cy.get('input.maxMaskLengthSymbols')
       .should('have.value', '+_ (___) ___-__-__')
       .type('+ ())(--+ -')
       .should('have.value', '++ ( ()) )(---+- -')
@@ -327,7 +327,7 @@ describe('Input with showMask and allowed mask symbols', () => {
   });
 
   it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskSymbols')
+    cy.get('input.maxMaskLengthSymbols')
       .should('have.value', '+_ (___) ___-__-__')
       .type('+ (')
       .should('have.value', '++ ( (_) ___-__-__')
@@ -350,7 +350,7 @@ describe('Input with showMask and allowed mask symbols', () => {
   });
 
   it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskSymbols')
+    cy.get('input.maxMaskLengthSymbols')
       .should('have.value', '+_ (___) ___-__-__')
       .type('+ ())(--+ -')
       .should('have.value', '++ ( ()) )(---+- -')
@@ -376,13 +376,13 @@ describe('Input with showMask and allowed mask symbols', () => {
   });
 });
 
-describe('Input with partial showMask and allowed mask symbols', () => {
+describe('Input with partial maxMaskLength and allowed mask symbols', () => {
   afterEach(() => {
-    cy.get('input.showMaskPart').clear();
+    cy.get('input.maxMaskLengthPart').clear();
   });
 
   it('should correctly apply mask for typed characters', () => {
-    cy.get('input.showMaskPart')
+    cy.get('input.maxMaskLengthPart')
       .should('have.value', ' _ [___]')
       .type('a')
       .should('have.value', ' a [___]')
@@ -402,7 +402,7 @@ describe('Input with partial showMask and allowed mask symbols', () => {
   });
 
   it('should correctly apply mask for deleted characters', () => {
-    cy.get('input.showMaskPart')
+    cy.get('input.maxMaskLengthPart')
       .should('have.value', ' _ [___]')
       .type('a123$% []')
       .should('have.value', ' a [123] [$% ] [[]]')
@@ -437,7 +437,7 @@ describe('Input with partial showMask and allowed mask symbols', () => {
   });
 
   it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskPart')
+    cy.get('input.maxMaskLengthPart')
       .should('have.value', ' _ [___]')
       .type('a12')
       .should('have.value', ' a [12_]')
@@ -454,7 +454,7 @@ describe('Input with partial showMask and allowed mask symbols', () => {
   });
 
   it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskPart')
+    cy.get('input.maxMaskLengthPart')
       .should('have.value', ' _ [___]')
       .type('a123$% []')
       .should('have.value', ' a [123] [$% ] [[]]')
@@ -480,13 +480,13 @@ describe('Input with partial showMask and allowed mask symbols', () => {
   });
 });
 
-describe('Input with partial showMask, allowed mask symbols and trailing is disabled', () => {
+describe('Input with partial maxMaskLength, allowed mask symbols and trailing is disabled', () => {
   afterEach(() => {
-    cy.get('input.showMaskPartNoTrailing').clear();
+    cy.get('input.maxMaskLengthPartNoTrailing').clear();
   });
 
   it('should correctly apply mask for typed characters', () => {
-    cy.get('input.showMaskPartNoTrailing')
+    cy.get('input.maxMaskLengthPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a')
       .should('have.value', ' a [___]')
@@ -506,7 +506,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 
   it('should correctly apply mask for deleted characters', () => {
-    cy.get('input.showMaskPartNoTrailing')
+    cy.get('input.maxMaskLengthPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a123$% []')
       .should('have.value', ' a [123] [$% ] [[]]')
@@ -538,7 +538,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 
   it('should correctly apply mask for typed characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskPartNoTrailing')
+    cy.get('input.maxMaskLengthPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a12')
       .should('have.value', ' a [12_]')
@@ -555,7 +555,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 
   it('should correctly apply mask for deleted characters if some characters are present after cursor', () => {
-    cy.get('input.showMaskPartNoTrailing')
+    cy.get('input.maxMaskLengthPartNoTrailing')
       .should('have.value', ' _ [___]')
       .type('a123$% []')
       .should('have.value', ' a [123] [$% ] [[]]')
@@ -581,7 +581,7 @@ describe('Input with partial showMask, allowed mask symbols and trailing is disa
   });
 });
 
-describe('Input with showMask and regex mask', () => {
+describe('Input with maxMaskLength and regex mask', () => {
   afterEach(() => {
     cy.get('input.regex').clear();
   });

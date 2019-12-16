@@ -7,33 +7,41 @@
 
 <body>
   <div>Phone mask - specify mask, mask symbol and allowed symbols</div>
-  <input class="rxmask simple" mask="***-**-**" placeholderSymbol="*" allowedCharacters="[0-9]"/>
-  <br /><code>class="rxmask simple" mask="***-**-**" placeholderSymbol="*" allowedCharacters="[0-9]"</code>
+  <input class="rxmask simple" data-mask="***-**-**" data-placeholderSymbol="*" data-allowedCharacters="[0-9]" />
+  <br /><code>class="rxmask simple" data-mask="***-**-**" data-placeholderSymbol="*" data-allowedCharacters="[0-9]"</code>
   <br /><br />
 
   <div>Phone mask - showing whole mask including unfilled part</div>
-  <input class="rxmask showMask" mask="+_ (___) ___-__-__" placeholderSymbol="_" showMask="true" allowedCharacters="[0-9]"/>
-  <br /><code>class="rxmask showMask" mask="+_ (___) ___-__-__" placeholderSymbol="_" showMask="true" allowedCharacters="[0-9]"</code>
+  <input class="rxmask maxMaskLength" data-mask="+_ (___) ___-__-__" data-placeholderSymbol="_"
+    data-maxMaskLength="Infinity" data-allowedCharacters="[0-9]" />
+  <br /><code>class="rxmask maxMaskLength" data-mask="+_ (___) ___-__-__" data-placeholderSymbol="_" data-maxMaskLength="Infinity" data-allowedCharacters="[0-9]"</code>
   <br /><br />
 
-  <div>Phone mask, but only for special characters - allowedCharacters can include symbols from mask EXCEPT "symbol" property itself (note that special symbols should be escaped)</div>
-  <input class="rxmask showMaskSymbols" mask="+_ (___) ___-__-__" placeholderSymbol="_" showMask="true" allowedCharacters="[ \-\+\(\)]"/>
-  <br /><code>class="rxmask showMaskSymbols" mask="+_ (___) ___-__-__" placeholderSymbol="_" showMask="true" allowedCharacters="[ \-\+\(\)]"</code>
+  <div>Phone mask, but only for special characters - allowedCharacters can include symbols from mask EXCEPT "symbol"
+    property itself (note that special symbols should be escaped)</div>
+  <input class="rxmask maxMaskLengthSymbols" data-mask="+_ (___) ___-__-__" data-placeholderSymbol="_"
+    data-maxMaskLength="Infinity" data-allowedCharacters="[ \-\+\(\)]" />
+  <br /><code>class="rxmask maxMaskLengthSymbols" data-mask="+_ (___) ___-__-__" data-placeholderSymbol="_" data-maxMaskLength="Infinity" data-allowedCharacters="[ \-\+\(\)]"</code>
   <br /><br />
 
   <div>Random mask - only part of mask is shown</div>
-  <input class="rxmask showMaskPart" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8" />
-  <br /><code>class="rxmask showMaskPart" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8"</code>
+  <input class="rxmask maxMaskLengthPart" data-mask=" _ [___] [___] [__]" data-placeholderSymbol="_"
+    data-maxMaskLength="8" />
+  <br /><code>class="rxmask maxMaskLengthPart" data-mask=" _ [___] [___] [__]" data-placeholderSymbol="_" data-maxMaskLength="8"</code>
   <br /><br />
 
   <div>Random mask - only part of mask is shown and trailing part is disabled</div>
-  <input class="rxmask showMaskPartNoTrailing" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8" trailing="false" />
-  <br /><code>class="rxmask showMaskPartNoTrailing" mask=" _ [___] [___] [__]" placeholderSymbol="_" showMask="8" trailing="false"</code>
+  <input class="rxmask maxMaskLengthPartNoTrailing" data-mask=" _ [___] [___] [__]" data-placeholderSymbol="_"
+    data-maxMaskLength="8" data-trailing="false" />
+  <br /><code>class="rxmask maxMaskLengthPartNoTrailing" data-mask=" _ [___] [___] [__]" data-placeholderSymbol="_" data-maxMaskLength="8" data-trailing="false"</code>
   <br /><br />
 
-  <div>Regex mask - only certain symbols are allowed for each character (you don't need to specify "mask" property if "rxmask" is present (it will be ignored))</div>
-  <input class="rxmask regex" rxmask="[A-Z][A-Z] [0-4][\d][\d]-[a-z][\d]" placeholderSymbol="*" showMask="true"/>
-  <br /><code>class="rxmask regex" rxmask="[A-Z][A-Z] [0-4][\d][\d]-[a-z][\d]" placeholderSymbol="*" showMask="true"</code>
+  <div>Regex mask - only certain symbols are allowed for each character (you don't need to specify "mask" property if
+    "rxmask" is present (it will be ignored))</div>
+  <input class="rxmask regex" data-rxmask="[A-Z][A-Z] [0-4][\d][\d]-[a-z][\d]" data-placeholderSymbol="*"
+    data-maxMaskLength="Infinity" />
+  <br /><code>class="rxmask regex" data-rxmask="[A-Z][A-Z] [0-4][\d][\d]-[a-z][\d]" data-placeholderSymbol="*" data-maxMaskLength="Infinity"</code>
   <br /><br />
 </body>
+
 </html>
