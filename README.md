@@ -123,9 +123,10 @@ These are class only options:
 - `value` - assign to it value you want to parse
 - `cursorPos` - you can assign to it cursor position value (in case of `<input>` it's `selectionStart` property). After `parseMask()` was called, `finalCursorPos` will be updated with appropriate value.
 
-Also class has two important methods and two properties:
+Also class has two important methods and three properties:
 
-- `output` - parsed `value`. Grab it after you called `parseMask()`. This value is the correct field to use as parsed mask value.
+- `output` - parsed `value` that has applied mask to it. Grab it after you called `parseMask()`. This value is the correct field to use as parsed mask value.
+- `parsedValue` - parsed `value` before mask was applied. Grab it after you called `parseMask()`. This value is the correct parsed value without mask.
 - `finalCursorPos` - modified `cursorPos`. Grab it after you called `parseMask()`. This value is the correct cursor position to use for your input.
 - `parseMask()` method - you should call this method when you assigned all required parameters to `Parser` yourself. It will parse the mask and update `output` and `finalCursorPos` values.
 - `onInput()` method - you should call this method when you provided `Parser` class with `input` object. It will get all properties from provided `input`, call `parseMask()` and update `output` and `finalCursorPos` values.

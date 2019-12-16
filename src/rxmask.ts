@@ -33,6 +33,7 @@ export default class Parser {
   };
   input: HTMLTextAreaElement | HTMLInputElement | null | undefined;
   private _output: string = '';
+  private _parsedValue: string = '';
   private _prevValue: string = '';
   private _isRemovingSymbols: boolean = false;
   private _actualCursorPos: number = 0;
@@ -50,6 +51,10 @@ export default class Parser {
 
   get output() {
     return this._output;
+  }
+
+  get parsedValue() {
+    return this._parsedValue;
   }
 
   get finalCursorPos() {
@@ -137,6 +142,7 @@ export default class Parser {
   parseMask() {
     const noMaskValue = this.parseOutMask();
     const parsedValue = this.parseRxmask(noMaskValue);
+    this._parsedValue = parsedValue;
     this._output = this.getOutput(parsedValue);
     this._prevValue = this._output;
   }
