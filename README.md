@@ -16,6 +16,7 @@ Playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin
 - Flexible - allows to change mask, placeholder symbol format, show or hide unfilled mask (or even part of it) and more
 - Allows to use same characters that are present in mask
 - Allows to specify format for every character
+- Detailed input error log
 - Robust (test coverage with Cypress)
 - No dependencies
 
@@ -123,13 +124,15 @@ These are class only options:
 - `value` - assign to it value you want to parse
 - `cursorPos` - you can assign to it cursor position value (in case of `<input>` it's `selectionStart` property). After `parseMask()` was called, `finalCursorPos` will be updated with appropriate value.
 
-Also class has two important methods and three properties:
+Also class has some important methods and properties:
 
-- `output` - parsed `value` that has applied mask to it. Grab it after you called `parseMask()`. This value is the correct field to use as parsed mask value.
-- `parsedValue` - parsed `value` before mask was applied. Grab it after you called `parseMask()`. This value is the correct parsed value without mask.
-- `finalCursorPos` - modified `cursorPos`. Grab it after you called `parseMask()`. This value is the correct cursor position to use for your input.
 - `parseMask()` method - you should call this method when you assigned all required parameters to `Parser` yourself. It will parse the mask and update `output` and `finalCursorPos` values.
 - `onInput()` method - you should call this method when you provided `Parser` class with `input` object. It will get all properties from provided `input`, call `parseMask()` and update `output` and `finalCursorPos` values.
+Grab this values after you called `parseMask()`
+- `output` - parsed `value` that has applied mask to it. This value is the correct field to use as parsed mask value.
+- `parsedValue` - parsed `value` before mask was applied. This value is the correct parsed value without mask.
+- `finalCursorPos` - modified `cursorPos`. This value is the correct cursor position to use for your input.
+- `errors` - array with errors on input. If no errors were made, this array is empty. If some errors were made, this array contains objects with wrong symbol, its position and error type. 
 
 ## <a name="Notes"></a>Notes
 

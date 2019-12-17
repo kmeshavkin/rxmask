@@ -18,17 +18,26 @@ export interface Options {
     maxMaskLength: number;
     trailing: boolean;
 }
+export interface RXError {
+    symbol: string;
+    position: number;
+    type: 'allowedCharacters' | 'length' | 'rxmask';
+}
 export default class Parser {
     options: Options;
     input: HTMLTextAreaElement | HTMLInputElement | null | undefined;
     private _output;
+    private _parsedValue;
     private _prevValue;
+    private _errors;
     private _isRemovingSymbols;
     private _actualCursorPos;
     private _finalCursorPos;
     constructor(options?: InputOptions, input?: HTMLTextAreaElement | HTMLInputElement | null | undefined);
     get output(): string;
+    get parsedValue(): string;
     get finalCursorPos(): number;
+    get errors(): RXError[];
     /**
      * Takes options from provided option values
      * @param {InputOptions} options Options to set

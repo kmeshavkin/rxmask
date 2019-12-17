@@ -3,6 +3,7 @@
 ### Tests
 
 - Add more tests for other inputs similar to simple input
+- Tests for errors (add to existing tests)
 - Add tests for Parser class and onInput() function?
 - test CTRL+backspace?
 

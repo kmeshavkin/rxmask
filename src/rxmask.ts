@@ -20,6 +20,12 @@ export interface Options {
   trailing: boolean;
 }
 
+export interface RXError {
+  symbol: string;
+  position: number;
+  type: 'allowedCharacters' | 'length' | 'rxmask';
+}
+
 export default class Parser {
   options: Options = {
     mask: '',
@@ -35,6 +41,7 @@ export default class Parser {
   private _output: string = '';
   private _parsedValue: string = '';
   private _prevValue: string = '';
+  private _errors: RXError[] = [];
   private _isRemovingSymbols: boolean = false;
   private _actualCursorPos: number = 0;
   private _finalCursorPos: number = 0;
@@ -59,6 +66,10 @@ export default class Parser {
 
   get finalCursorPos() {
     return this._finalCursorPos;
+  }
+
+  get errors() {
+    return this._errors;
   }
 
   /**
@@ -140,6 +151,7 @@ export default class Parser {
    * Call this to update this.output and this.finalCursorPos according to options currently provided in this.options
    */
   parseMask() {
+    this._errors = [];
     const noMaskValue = this.parseOutMask();
     const parsedValue = this.parseRxmask(noMaskValue);
     this._parsedValue = parsedValue;
@@ -182,11 +194,18 @@ export default class Parser {
     // Get value before cursor without mask symbols
     let beforeCursor = '';
     for (let i = 0; i < cursorPos; i++) {
-      if (value[i] !== rxmask[i] && value[i] !== placeholderSymbol && value[i].match(parsedAllowedCharacters)) {
-        // If parsed value length before cursor so far less than
-        // amount of allowed symbols in rxmask minus parsed value length after cursor, add symbol
-        if (beforeCursor.length < rxmask.filter(pattern => pattern.match(/\[.*\]/)).length - afterCursor.length)
-          beforeCursor += value[i];
+      if (value[i] !== rxmask[i]) {
+        if (value[i] !== placeholderSymbol && value[i].match(parsedAllowedCharacters)) {
+          // If parsed value length before cursor so far less than
+          // amount of allowed symbols in rxmask minus parsed value length after cursor, add symbol
+          if (beforeCursor.length < rxmask.filter(pattern => pattern.match(/\[.*\]/)).length - afterCursor.length) {
+            beforeCursor += value[i];
+          } else {
+            this._errors.push({ symbol: value[i], position: i, type: 'length' });
+          }
+        } else if (value[i] !== placeholderSymbol && !value[i].match(parsedAllowedCharacters)) {
+          this._errors.push({ symbol: value[i], position: i, type: 'allowedCharacters' });
+        }
       }
     }
 
@@ -210,6 +229,7 @@ export default class Parser {
         parsedValue += noMaskValue[i];
         i++;
       } else {
+        this._errors.push({ symbol: noMaskValue[i], position: i, type: 'rxmask' });
         noMaskValue.shift();
         // This line returns cursor to appropriate position according to removed elements
         if (this._actualCursorPos > i) this._actualCursorPos--;
