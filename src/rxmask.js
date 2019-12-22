@@ -10,10 +10,10 @@ export default class Parser {
             maxMaskLength: 0,
             trailing: true
         };
+        this.errors = [];
         this._output = '';
         this._parsedValue = '';
         this._prevValue = '';
-        this._errors = [];
         this._isRemovingSymbols = false;
         this._actualCursorPos = 0;
         this._finalCursorPos = 0;
@@ -34,9 +34,6 @@ export default class Parser {
     }
     get finalCursorPos() {
         return this._finalCursorPos;
-    }
-    get errors() {
-        return this._errors;
     }
     /**
      * Takes options from provided option values
@@ -105,7 +102,7 @@ export default class Parser {
      * Call this to update this.output and this.finalCursorPos according to options currently provided in this.options
      */
     parseMask() {
-        this._errors = [];
+        this.errors = [];
         const noMaskValue = this.parseOutMask();
         const parsedValue = this.parseRxmask(noMaskValue);
         this._parsedValue = parsedValue;
@@ -153,11 +150,11 @@ export default class Parser {
                         beforeCursor += value[i];
                     }
                     else {
-                        this._errors.push({ symbol: value[i], position: i, type: 'length' });
+                        this.errors.push({ symbol: value[i], position: i, type: 'length' });
                     }
                 }
                 else if (value[i] !== placeholderSymbol && !value[i].match(parsedAllowedCharacters)) {
-                    this._errors.push({ symbol: value[i], position: i, type: 'allowedCharacters' });
+                    this.errors.push({ symbol: value[i], position: i, type: 'allowedCharacters' });
                 }
             }
         }
@@ -182,7 +179,7 @@ export default class Parser {
                 i++;
             }
             else {
-                this._errors.push({ symbol: noMaskValue[i], position: i, type: 'rxmask' });
+                this.errors.push({ symbol: noMaskValue[i], position: i, type: 'rxmask' });
                 noMaskValue.shift();
                 // This line returns cursor to appropriate position according to removed elements
                 if (this._actualCursorPos > i)

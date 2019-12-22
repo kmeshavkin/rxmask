@@ -26,10 +26,10 @@ export interface RXError {
 export default class Parser {
     options: Options;
     input: HTMLTextAreaElement | HTMLInputElement | null | undefined;
+    errors: RXError[];
     private _output;
     private _parsedValue;
     private _prevValue;
-    private _errors;
     private _isRemovingSymbols;
     private _actualCursorPos;
     private _finalCursorPos;
@@ -37,7 +37,6 @@ export default class Parser {
     get output(): string;
     get parsedValue(): string;
     get finalCursorPos(): number;
-    get errors(): RXError[];
     /**
      * Takes options from provided option values
      * @param {InputOptions} options Options to set

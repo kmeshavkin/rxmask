@@ -1,6 +1,6 @@
 {
   "name": "rxmask",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
   "main": "./src/rxmask.js",
   "scripts": {
