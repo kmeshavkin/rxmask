@@ -154,6 +154,7 @@ export default class Parser {
     this._parsedValue = parsedValue;
     this._output = this.getOutput(parsedValue);
     this._prevValue = this._output;
+    console.log('this.errors: ', this.errors);
   }
 
   // Idea here is to parse everything before cursor position as is,
@@ -214,22 +215,28 @@ export default class Parser {
     const { rxmask } = this.options;
     let parsedValue = '';
     const filteredRxmask = rxmask.filter(pattern => pattern.match(/\[.*\]/));
-    let i = 0;
-    while (noMaskValue.length > 0 && i < noMaskValue.length) {
+    let correctCount = 0;
+    let incorrectCount = 0;
+    while (noMaskValue.length > 0 && correctCount < noMaskValue.length) {
       let regexChar = /./;
       try {
-        regexChar = new RegExp(filteredRxmask[i]);
+        regexChar = new RegExp(filteredRxmask[correctCount]);
       } catch (error) {
         console.error('Wrong regex for rxmask!');
       }
-      if (noMaskValue[i].match(regexChar)) {
-        parsedValue += noMaskValue[i];
-        i++;
+      if (noMaskValue[correctCount].match(regexChar)) {
+        parsedValue += noMaskValue[correctCount];
+        correctCount++;
       } else {
-        this.errors.push({ symbol: noMaskValue[i], position: i, type: 'rxmask' });
+        this.errors.push({
+          symbol: noMaskValue[correctCount],
+          position: correctCount + incorrectCount,
+          type: 'rxmask'
+        });
         noMaskValue.shift();
+        incorrectCount++;
         // This line returns cursor to appropriate position according to removed elements
-        if (this._actualCursorPos > i) this._actualCursorPos--;
+        if (this._actualCursorPos > correctCount) this._actualCursorPos--;
       }
     }
 
