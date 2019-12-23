@@ -6,7 +6,7 @@
 
 Easy to install and use advanced mask package.
 
-![Demo](https://i.imgur.com/JQkbS8p.gif)
+![Demo](https://i.imgur.com/zdByXPt.gif)
 
 Playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin.github.io/rxmask-playground/).
 
