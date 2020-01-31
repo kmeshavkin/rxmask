@@ -154,7 +154,6 @@ export default class Parser {
     this._parsedValue = parsedValue;
     this._output = this.getOutput(parsedValue);
     this._prevValue = this._output;
-    console.log('this.errors: ', this.errors);
   }
 
   // Idea here is to parse everything before cursor position as is,
