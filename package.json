@@ -1,11 +1,11 @@
 {
   "name": "rxmask",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
   "main": "./src/rxmask.js",
   "scripts": {
     "test": "cypress open",
-    "build": "tsc & webpack"
+    "build": "webpack"
   },
   "author": "Konstantin Meshavkin",
   "license": "MIT",
@@ -32,6 +32,8 @@
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.19.1",
+    "terser-webpack-plugin": "^2.3.4",
+    "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
