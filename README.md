@@ -1,7 +1,7 @@
 # rxmask.js
 
 ![minzipped size](https://img.shields.io/bundlephobia/minzip/rxmask)
-![downloads/month](https://img.shields.io/npm/dm/rxmask)
+![downloads](https://img.shields.io/npm/dt/rxmask)
 ![type definitions](https://img.shields.io/npm/types/rxmask)
 
 Easy to install and use advanced mask package.
@@ -25,16 +25,16 @@ If you want to check my other works, you can visit my portfolio: [https://kmesha
 ## Table of contents
 
 - [rxmask.js](#rxmaskjs)
-  - [Features](#features)
+  - [<a name="Features"></a>Features](#features)
   - [Table of contents](#table-of-contents)
-  - [Example](#example)
-  - [Installation](#installation)
-    1. [Use it in script tag](#use-it-in-script-tag)
-    2. [Use it for existing `input` object (`HTMLTextAreaElement` or `HTMLInputElement` type)](#use-it-for-existing-input-object-lthtmltextareaelementgt-or-lthtmlinputelementgt-type)
-    3. [Use it to parse raw string value](#use-it-to-parse-raw-string-value)
-    - [Options](#options)
-  - [Notes](#notes)
-  - [Testing](#testing)
+  - [<a name="Example"></a>Example](#example)
+  - [<a name="Installation"></a>Installation](#installation)
+    - [<a name="Installation/ScriptTag"></a>Use it in script tag](#use-it-in-script-tag)
+    - [<a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#use-it-for-existing-input-object-htmltextareaelement-or-htmlinputelement-type)
+    - [<a name="Installation/RawString"></a>Use it to parse raw string value](#use-it-to-parse-raw-string-value)
+    - [<a name="Installation/Options"></a>Options](#options)
+  - [<a name="Notes"></a>Notes](#notes)
+  - [<a name="Testing"></a>Testing](#testing)
 
 ## <a name="Example"></a>Example
 
@@ -128,11 +128,11 @@ Also class has some important methods and properties:
 
 - `parseMask()` method - you should call this method when you assigned all required parameters to `Parser` yourself. It will parse the mask and update `output` and `finalCursorPos` values.
 - `onInput()` method - you should call this method when you provided `Parser` class with `input` object. It will get all properties from provided `input`, call `parseMask()` and update `output` and `finalCursorPos` values.
-Grab this values after you called `parseMask()`
+  Grab this values after you called `parseMask()`
 - `output` - parsed `value` that has applied mask to it. This value is the correct field to use as parsed mask value.
 - `parsedValue` - parsed `value` before mask was applied. This value is the correct parsed value without mask.
 - `finalCursorPos` - modified `cursorPos`. This value is the correct cursor position to use for your input.
-- `errors` - array with errors on input. If no errors were made, this array is empty. If some errors were made, this array contains objects with wrong symbol, its position and error type. 
+- `errors` - array with errors on input. If no errors were made, this array is empty. If some errors were made, this array contains objects with wrong symbol, its position and error type.
 
 ## <a name="Notes"></a>Notes
 
