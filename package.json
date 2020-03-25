@@ -1,6 +1,6 @@
 {
   "name": "rxmask",
-  "version": "1.4.11",
+  "version": "1.4.12",
   "description": "Simple, but advanced mask parser for html input or parsing provided string directly",
   "main": "./src/rxmask.js",
   "scripts": {
@@ -23,20 +23,20 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
-    "cypress": "^3.6.1",
-    "eslint": "^6.6.0",
-    "eslint-config-google": "^0.12.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "prettier": "^1.19.1",
-    "terser-webpack-plugin": "^2.3.4",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "@types/mocha": "^7.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "cypress": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^2.0.2",
+    "terser-webpack-plugin": "^2.3.5",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
   "types": "./src/rxmask.d.ts",
   "repository": {
