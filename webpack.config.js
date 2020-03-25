@@ -8,7 +8,9 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'src'),
-    filename: '[name].js'
+    filename: '[name].js',
+    library: 'rxmask',
+    libraryTarget: 'umd'
   },
   optimization: {
     minimizer: [
