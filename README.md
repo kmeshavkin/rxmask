@@ -20,7 +20,7 @@ Playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin
 - Robust (test coverage with Cypress)
 - No dependencies
 
-If you want to check my other works, you can visit my portfolio: [https://kmeshavkin.github.io/](https://kmeshavkin.github.io/)
+If you want to check my other projects, you can visit my portfolio: [https://kmeshavkin.github.io/](https://kmeshavkin.github.io/)
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ If you want to check my other works, you can visit my portfolio: [https://kmesha
   - [<a name="Example"></a>Example](#example)
   - [<a name="Installation"></a>Installation](#installation)
     - [<a name="Installation/ScriptTag"></a>Use it in script tag](#use-it-in-script-tag)
-    - [<a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#use-it-for-existing-input-object-htmltextareaelement-or-htmlinputelement-type)
+    - [<a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#-use-it-for-existing-input-object-htmltextareaelement-or-htmlinputelement-type)
     - [<a name="Installation/RawString"></a>Use it to parse raw string value](#use-it-to-parse-raw-string-value)
     - [<a name="Installation/Options"></a>Options](#options)
   - [<a name="Notes"></a>Notes](#notes)
