@@ -5,7 +5,7 @@
 // Also no way to select text in input for deleting multiple symbols ('should correctly parse multiple deleted characters') except maybe this: https://gist.github.com/erquhart/37bf2d938ab594058e0572ed17d3837a
 
 before(() => {
-  cy.visit('http://127.0.0.1:5500/example/example.html');
+  cy.visit('http://127.0.0.1:5501/example/example.html');
 });
 
 describe('Simple input with values restricted to numbers', () => {
