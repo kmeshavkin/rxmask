@@ -8,7 +8,7 @@ Easy to install and use advanced mask package.
 
 ![Demo](https://i.imgur.com/zdByXPt.gif)
 
-Playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin.github.io/rxmask-playground/).
+Playground: [https://rxmask.kmesh.dev/](https://rxmask.kmesh.dev/).
 
 ## <a name="Features"></a>Features
 
@@ -38,7 +38,7 @@ If you want to check my other projects, you can visit my portfolio: [https://kme
 
 ## <a name="Example"></a>Example
 
-You can see this package in action in playground: [https://kmeshavkin.github.io/rxmask-playground/](https://kmeshavkin.github.io/rxmask-playground/), or you can go to `example/example.html` in the project to see how this package works in plain HTML file.
+You can see this package in action in playground: [https://rxmask.kmesh.dev/](https://rxmask.kmesh.dev/), or you can go to `example/example.html` in the project to see how this package works in plain HTML file.
 
 You can view source code in `./src folder`: `rxmask.ts` for typescript or `rxmask.js` for javascript.
 
