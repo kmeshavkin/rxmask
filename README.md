@@ -20,7 +20,7 @@ Playground: [https://rxmask.kmesh.dev/](https://rxmask.kmesh.dev/).
 - Robust (test coverage with Cypress)
 - No dependencies
 
-If you want to check my other projects, you can visit my portfolio: [https://kmeshavkin.github.io/](https://kmeshavkin.github.io/)
+If you want to check my other projects, you can visit my portfolio: [https://portfolio.kmesh.dev/](https://portfolio.kmesh.dev/)
 
 ## Table of contents
 
