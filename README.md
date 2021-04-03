@@ -10,7 +10,7 @@ Easy to install and use advanced mask package.
 
 Playground: [https://rxmask.kmesh.dev/](https://rxmask.kmesh.dev/).
 
-## <a name="Features"></a>Features
+## Features
 
 - Both module and simple HTML script
 - Flexible - allows to change mask, placeholder symbol format, show or hide unfilled mask (or even part of it) and more
@@ -25,26 +25,26 @@ If you want to check my other projects, you can visit my portfolio: [https://por
 ## Table of contents
 
 - [rxmask.js](#rxmaskjs)
-  - [<a name="Features"></a>Features](#features)
+  - [Features](#features)
   - [Table of contents](#table-of-contents)
-  - [<a name="Example"></a>Example](#example)
-  - [<a name="Installation"></a>Installation](#installation)
-    - [<a name="Installation/ScriptTag"></a>Use it in script tag](#use-it-in-script-tag)
-    - [<a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#-use-it-for-existing-input-object-htmltextareaelement-or-htmlinputelement-type)
-    - [<a name="Installation/RawString"></a>Use it to parse raw string value](#use-it-to-parse-raw-string-value)
-    - [<a name="Installation/Options"></a>Options](#options)
-  - [<a name="Notes"></a>Notes](#notes)
-  - [<a name="Testing"></a>Testing](#testing)
+  - [Example](#example)
+  - [Installation](#installation)
+    - [Use it in script tag](#use-it-in-script-tag)
+    - [Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)](#use-it-for-existing-input-object-htmltextareaelement-or-htmlinputelement-type)
+    - [Use it to parse raw string value](#use-it-to-parse-raw-string-value)
+    - [Options](#options)
+  - [Notes](#notes)
+  - [Testing](#testing)
 
-## <a name="Example"></a>Example
+## Example
 
 You can see this package in action in playground: [https://rxmask.kmesh.dev/](https://rxmask.kmesh.dev/), or you can go to `example/example.html` in the project to see how this package works in plain HTML file.
 
 You can view source code in `./src folder`: `rxmask.ts` for typescript or `rxmask.js` for javascript.
 
-## <a name="Installation"></a>Installation
+## Installation
 
-### <a name="Installation/ScriptTag"></a>Use it in script tag
+### Use it in script tag
 
 It will work for simple plain html files.
 
@@ -70,7 +70,7 @@ You can also use unminified `rxmask.js` file, though it's recommended to use min
 <script type="module" src="../src/rxmask.js"></script>
 ```
 
-### <a name="Installation/Input"></a> Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)
+### Use it for existing `input` object (`<HTMLTextAreaElement>` or `<HTMLInputElement>` type)
 
 - `npm i rxmask`
 - Import `Parser` class (it has default export).
@@ -86,7 +86,7 @@ const parser = new rxmask({}, input);
 input.oninput = () => parser.onInput();
 ```
 
-### <a name="Installation/RawString"></a>Use it to parse raw string value
+### Use it to parse raw string value
 
 It's useful if you want to just parse value according to any mask, detached from any actual input element.
 
@@ -108,7 +108,7 @@ parser.parseMask();
 
 Note that under the hood class stores previous value, so if you want to just parse string once, you need to reinitialize class every time so it will assume that previous value was empty string (this is subject to change).
 
-### <a name="Installation/Options"></a>Options
+### Options
 
 These options can be provided both to `Parser` class itself (through options or property assignment) and as `<input>` tag properties (note that if you are using options in `<input>` tag, you should add `data-` before any option, like `data-maxMaskLength`):
 
@@ -134,12 +134,12 @@ Also class has some important methods and properties:
 - `finalCursorPos` - modified `cursorPos`. This value is the correct cursor position to use for your input.
 - `errors` - array with errors on input. If no errors were made, this array is empty. If some errors were made, this array contains objects with wrong symbol, its position and error type.
 
-## <a name="Notes"></a>Notes
+## Notes
 
 - Typescript support (types file) is provided with package.
 - NOT Unicode friendly (or any character that is represented by more than one UTF-16 code unit for that matter) - planned feature
 
-## <a name="Testing"></a>Testing
+## Testing
 
 I use Live Server extension for VSCode for easier testing.
 
